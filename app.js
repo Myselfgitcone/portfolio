@@ -1,0 +1,39 @@
+// Contact links, shown in the nav and footer. Add yours here, e.g.
+//   { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name" },
+//   { label: "Email", href: "mailto:you@example.com" },
+const CONTACT = [];
+
+// Grainflow publishes its lake with an open CORS header, so the hub can show
+// how fresh the live data is. Silo reads the same build.
+const LAKE_MANIFEST = "https://grainflow-mauve.vercel.app/data/lake/manifest.json";
+
+const stamp = (iso) =>
+  new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+
+function addContacts() {
+  for (const container of document.querySelectorAll("#contact-links, footer .links")) {
+    for (const { label, href } of CONTACT) {
+      container.append(Object.assign(document.createElement("a"), { textContent: label, href }));
+    }
+  }
+}
+
+async function showFreshness() {
+  const pulse = document.getElementById("pulse-text");
+  try {
+    const manifest = await fetch(LAKE_MANIFEST, { cache: "no-store" }).then((r) => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    });
+    const rows = manifest.tables.reduce((sum, t) => sum + t.rows, 0);
+    const when = stamp(manifest.generated_at);
+    pulse.textContent = `Live data last updated ${when}. Grainflow rebuilds it four times a day and Silo answers from it.`;
+    document.getElementById("grainflow-fresh").textContent =
+      `Last updated ${when} · ${manifest.tables.length} tables · ${rows.toLocaleString()} rows`;
+  } catch {
+    pulse.textContent = "Grainflow and Silo refresh four times a day from public sources.";
+  }
+}
+
+addContacts();
+showFreshness();

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jagadish Butukuri · Data Engineering</title>
+  <meta name="description" content="Senior data engineer. Live projects: a streaming grain-market lakehouse, an AI analyst over it, and a CDC-to-ML pipeline.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7f1; --surface: #ffffff; --ink: #15231a; --muted: #5d6a5f; --line: #d8ded2;
+      --leaf: #2e7d4f; --leaf-soft: #dcebdf; --corn: #9a6a00; --corn-soft: #fbf0d6;
+      --field: #12251a; --field-2: #1a3324; --field-ink: #eef3ea; --field-muted: #a5b5a7;
+      --kernel: #f2b630; --sprout: #7dd3a0;
+      --display: "Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
+      --body: "IBM Plex Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1712; --surface: #16211a; --ink: #e9efe6; --muted: #9faea1; --line: #2a3a2f;
+        --leaf: #5bc48a; --leaf-soft: #1d3626; --corn: #f2b630; --corn-soft: #33290f;
+        --field: #0b160f; --field-2: #13241a;
+        color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-underline-offset: 3px; }
+    :focus-visible { outline: 2px solid var(--kernel); outline-offset: 3px; border-radius: 6px; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    .hidden { display: none !important; }
+
+    .hero { background: radial-gradient(120% 100% at 85% 0%, var(--field-2), var(--field) 62%); color: var(--field-ink); padding-bottom: 64px; }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding-top: 22px; font-size: 15px; }
+    .nav a { color: var(--field-muted); text-decoration: none; }
+    .nav a:hover { color: var(--field-ink); }
+    .nav .links { display: flex; gap: 20px; }
+    .initials { font: 800 18px/1 var(--display); color: var(--field-ink) !important; letter-spacing: -.02em; }
+    h1 { font: 800 clamp(44px, 8vw, 92px)/.98 var(--display); letter-spacing: -.045em; margin: 72px 0 18px; }
+    .role { font: 600 clamp(20px, 2.6vw, 26px)/1.3 var(--display); color: var(--kernel); margin: 0 0 18px; letter-spacing: -.01em; }
+    .lede { color: var(--field-muted); font-size: 19px; max-width: 60ch; margin: 0; }
+
+    /* the hero's one visual: how the three projects relate */
+    .map { margin-top: 56px; display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 0 10px; }
+    .node { border: 1px solid rgba(238, 243, 234, .18); border-radius: 14px; padding: 14px 16px; background: rgba(255, 255, 255, .04); text-decoration: none; transition: border-color .2s; }
+    .node:hover { border-color: var(--kernel); }
+    .node b { font: 700 18px/1.2 var(--display); display: block; }
+    .node span { font-size: 14px; color: var(--field-muted); }
+    .node.soon { border-style: dashed; }
+    .edge { font: 500 12px/1.3 var(--mono); color: var(--kernel); text-align: center; min-width: 92px; }
+    .edge::before { content: ""; display: block; height: 2px; margin: 0 auto 6px; width: 100%;
+                    background: repeating-linear-gradient(90deg, var(--kernel) 0 8px, transparent 8px 14px); background-size: 28px 2px; animation: flow 1.2s linear infinite; }
+    .edge.faint { color: var(--field-muted); }
+    .edge.faint::before { background: repeating-linear-gradient(90deg, var(--field-muted) 0 4px, transparent 4px 10px); animation: none; opacity: .5; }
+    @keyframes flow { to { background-position: 28px 0; } }
+    .pulse { margin: 18px 0 0; font-size: 14px; color: var(--field-muted); display: flex; gap: 10px; align-items: center; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sprout); flex: none; animation: live 2.4s ease-out infinite; box-shadow: 0 0 0 0 rgba(125, 211, 160, .6); }
+    @keyframes live { 70% { box-shadow: 0 0 0 9px rgba(125, 211, 160, 0); } 100% { box-shadow: 0 0 0 0 rgba(125, 211, 160, 0); } }
+    @media (max-width: 760px) {
+      .map { grid-template-columns: 1fr; gap: 6px; }
+      .edge { min-width: 0; padding: 4px 0; }
+      .edge::before { width: 2px; height: 22px; background: repeating-linear-gradient(180deg, var(--kernel) 0 6px, transparent 6px 11px); animation: none; }
+      .edge.faint::before { background: repeating-linear-gradient(180deg, var(--field-muted) 0 4px, transparent 4px 9px); }
+    }
+
+    main section { padding-top: 72px; }
+    h2 { font: 800 clamp(28px, 3.6vw, 40px)/1.1 var(--display); letter-spacing: -.03em; margin: 0 0 10px; }
+    .sub { color: var(--muted); margin: 0 0 30px; max-width: 64ch; }
+
+    .project { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; padding: 34px 0; border-top: 1px solid var(--line); }
+    .project:first-of-type { border-top: 0; padding-top: 6px; }
+    .status { display: inline-flex; align-items: center; gap: 8px; font: 600 13px var(--body); border-radius: 999px; padding: 3px 11px; }
+    .status.live { color: var(--leaf); background: var(--leaf-soft); }
+    .status.building { color: var(--corn); background: var(--corn-soft); }
+    .status.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .project h3 { font: 800 clamp(28px, 3.2vw, 36px)/1.1 var(--display); letter-spacing: -.03em; margin: 12px 0 8px; }
+    .tagline { font-size: 19px; margin: 0 0 16px; }
+    .project p.body { color: var(--muted); margin: 0 0 16px; }
+    .stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 20px; padding: 0; list-style: none; }
+    .stack li { font: 500 13px var(--mono); border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; color: var(--muted); }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn { display: inline-block; text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 10px; padding: 9px 16px; border: 1px solid var(--line); background: var(--surface); }
+    .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .btn:hover { border-color: var(--leaf); }
+    .proof h4 { font: 700 16px/1.3 var(--display); margin: 0 0 10px; }
+    .proof ul { margin: 0; padding: 0; list-style: none; }
+    .proof li { padding: 9px 0 9px 22px; border-bottom: 1px dashed var(--line); color: var(--muted); font-size: 16px; position: relative; }
+    .proof li::before { content: ""; position: absolute; left: 2px; top: 17px; width: 8px; height: 8px; border-radius: 2px; background: var(--leaf); }
+    .proof li b { color: var(--ink); font-weight: 600; }
+    .freshness { margin-top: 14px; font-size: 14px; color: var(--muted); }
+
+    .practice { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
+    .practice h3 { font: 700 19px/1.3 var(--display); margin: 0 0 8px; }
+    .practice p { margin: 0; color: var(--muted); font-size: 16px; }
+
+    footer { margin-top: 88px; padding: 28px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    footer .links { display: flex; gap: 18px; }
+
+    @media (max-width: 820px) {
+      .project, .practice { grid-template-columns: 1fr; gap: 22px; }
+      h1 { margin-top: 48px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .edge::before, .dot { animation: none !important; } .node { transition: none; } }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <nav class="wrap nav" aria-label="Site">
+      <a class="initials" href="/">JB</a>
+      <div class="links" id="contact-links">
+        <a href="#work">Work</a>
+        <a href="https://github.com/Myselfgitcone">GitHub</a>
+      </div>
+    </nav>
+    <div class="wrap">
+      <h1>Jagadish Butukuri</h1>
+      <p class="role">Senior data engineer. Pipelines, lakehouses, and the AI on top of them.</p>
+      <p class="lede">Three working systems, each live and refreshing on real data. Every one is built
+        the way I'd build it at work: tested, documented, guarded, and cheap to run.</p>
+
+      <div class="map" aria-label="How the projects connect">
+        <a class="node" href="#grainflow"><b>Grainflow</b><span>Streaming lakehouse</span></a>
+        <div class="edge">gold tables<br>as Parquet</div>
+        <a class="node" href="#silo"><b>Silo</b><span>AI analyst over MCP</span></a>
+        <div class="edge faint">same<br>practices</div>
+        <a class="node soon" href="#orderline"><b>Orderline</b><span>CDC to ML forecast</span></a>
+      </div>
+      <p class="pulse" id="pulse"><span class="dot" aria-hidden="true"></span><span id="pulse-text">Checking the live data</span></p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="work">
+      <h2>Work</h2>
+      <p class="sub">Each project answers a real question end to end, from raw sources to something a person can use.</p>
+
+      <article class="project" id="grainflow">
+        <div>
+          <span class="status live">Live</span>
+          <h3>Grainflow</h3>
+          <p class="tagline">When US corn crop ratings fall, does corn rise the next week?</p>
+          <p class="body">A streaming lakehouse that joins CBOT futures, NOAA weather and USDA crop ratings, then
+            answers that question with nine seasons of data. Yes, modestly: corn gained about 0.9% the week
+            after ratings fell, and the gap is statistically significant.</p>
+          <ul class="stack" aria-label="Stack">
+            <li>Kafka</li><li>Spark Streaming</li><li>Iceberg</li><li>Trino</li><li>dbt</li><li>Dagster</li><li>DuckDB</li>
+          </ul>
+          <div class="actions">
+            <a class="btn primary" href="https://grainflow-mauve.vercel.app">Open the dashboard</a>
+            <a class="btn" href="https://github.com/Myselfgitcone/grainflow">Code</a>
+          </div>
+          <p class="freshness" id="grainflow-fresh"></p>
+        </div>
+        <div class="proof">
+          <h4>What it shows</h4>
+          <ul>
+            <li><b>Contracts as code.</b> One YAML per dataset drives validation, schemas, tests and freshness alerts.</li>
+            <li><b>A real bug caught in the model.</b> Equal-weighting 41 states diluted the signal; the mart now uses USDA's 18.</li>
+            <li><b>Production fixes.</b> A Spark out-of-memory on a 10-year backfill, solved by switching Iceberg to clustered writes.</li>
+            <li><b>Runs for free.</b> The same dbt models rebuild on DuckDB four times a day on Vercel.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project" id="silo">
+        <div>
+          <span class="status live">Live</span>
+          <h3>Silo</h3>
+          <p class="tagline">Ask Grainflow's data a question in plain English and get the numbers, with the SQL behind them.</p>
+          <p class="body">An MCP server and an AI analyst over Grainflow's gold tables. Any MCP client can use the
+            same tools. It can only read, it shows its work, and 13 graded questions gate every change.</p>
+          <ul class="stack" aria-label="Stack">
+            <li>MCP</li><li>Anthropic API</li><li>DuckDB</li><li>sqlglot</li><li>Python</li><li>Railway</li>
+          </ul>
+          <div class="actions">
+            <a class="btn primary" href="https://silo-production-9efb.up.railway.app">Ask it something</a>
+            <a class="btn" href="https://github.com/Myselfgitcone/silo">Code</a>
+          </div>
+        </div>
+        <div class="proof">
+          <h4>What it shows</h4>
+          <ul>
+            <li><b>Guardrails that hold.</b> A parser allows one read-only SELECT, and the engine itself can't touch files or the network.</li>
+            <li><b>Evals against live data.</b> Expected answers are computed by SQL at test time; the first run caught a wrong ranking.</li>
+            <li><b>A semantic layer.</b> Named metrics carry analyst rules, like never averaging corn with soybeans.</li>
+            <li><b>Bounded cost.</b> About a tenth of a cent per answer, a daily budget, and per-visitor limits.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project" id="orderline">
+        <div>
+          <span class="status building">Building now</span>
+          <h3>Orderline</h3>
+          <p class="tagline">How many of each product will we sell next week?</p>
+          <p class="body">An order system's database changes stream into Databricks within seconds, become clean
+            history tables, and feed a demand forecast that's watched for drift and retrained when it slips.</p>
+          <ul class="stack" aria-label="Stack">
+            <li>Postgres</li><li>Debezium</li><li>Kafka</li><li>Databricks</li><li>Delta Lake</li><li>MLflow</li><li>Terraform</li>
+          </ul>
+          <div class="actions">
+            <a class="btn" href="https://github.com/Myselfgitcone">Follow on GitHub</a>
+          </div>
+        </div>
+        <div class="proof">
+          <h4>What it will show</h4>
+          <ul>
+            <li><b>Change data capture.</b> Updates and deletes, not just appends, landing correctly in history tables.</li>
+            <li><b>Messy business data.</b> Late orders, schema changes and slowly changing customers.</li>
+            <li><b>ML in production.</b> A forecast with drift monitoring and retraining, tracked in MLflow.</li>
+            <li><b>Infrastructure as code.</b> The whole cloud setup rebuilds from one Terraform apply.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>How I work</h2>
+      <p class="sub">The same habits run through all three.</p>
+      <div class="practice">
+        <div><h3>Trust the data first</h3><p>Contracts, tests and quarantine tables before dashboards. A number nobody can check isn't an answer.</p></div>
+        <div><h3>Measure the AI</h3><p>Models get the same treatment as pipelines: guardrails, traces, and evals that fail a PR when accuracy drops.</p></div>
+        <div><h3>Ship it small</h3><p>Every change is a reviewed PR with green CI. Everything here runs live on free or near-free infrastructure.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Jagadish Butukuri</span>
+      <span class="links"><a href="https://github.com/Myselfgitcone">GitHub</a></span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
