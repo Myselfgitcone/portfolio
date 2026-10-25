@@ -7,6 +7,9 @@ const CONTACT = [];
 // how fresh the live data is. Silo reads the same build.
 const LAKE_MANIFEST = "https://grainflow-mauve.vercel.app/data/lake/manifest.json";
 
+// Orderline's page data on GitHub Pages, which also allows cross-origin reads.
+const ORDERLINE_DATA = "https://myselfgitcone.github.io/orderline/data/site.json";
+
 const stamp = (iso) =>
   new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
 
@@ -35,5 +38,21 @@ async function showFreshness() {
   }
 }
 
+async function showOrderline() {
+  try {
+    const data = await fetch(ORDERLINE_DATA, { cache: "no-store" }).then((r) => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    });
+    const s = data.summary;
+    document.getElementById("orderline-fresh").textContent =
+      `Last updated ${stamp(data.generated_at)} · ${s.orders.toLocaleString()} orders · ` +
+      `${s.open_orders.toLocaleString()} open · ${(s.late_share_30d * 100).toFixed(1)}% late in 30 days`;
+  } catch {
+    // The card reads fine without it.
+  }
+}
+
 addContacts();
 showFreshness();
+showOrderline();

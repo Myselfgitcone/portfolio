@@ -127,7 +127,7 @@
         <div class="edge">gold tables<br>as Parquet</div>
         <a class="node" href="#silo"><b>Silo</b><span>AI analyst over MCP</span></a>
         <div class="edge faint">same<br>practices</div>
-        <a class="node soon" href="#orderline"><b>Orderline</b><span>CDC to ML forecast</span></a>
+        <a class="node" href="#orderline"><b>Orderline</b><span>CDC to a late-delivery model</span></a>
       </div>
       <p class="pulse" id="pulse"><span class="dot" aria-hidden="true"></span><span id="pulse-text">Checking the live data</span></p>
     </div>
@@ -194,25 +194,34 @@
 
       <article class="project" id="orderline">
         <div>
-          <span class="status building">Building now</span>
+          <span class="status live">Live</span>
           <h3>Orderline</h3>
-          <p class="tagline">How many of each product will we sell next week?</p>
-          <p class="body">An order system's database changes stream into Databricks within seconds, become clean
-            history tables, and feed a demand forecast that's watched for drift and retrained when it slips.</p>
+          <p class="tagline">Will this order arrive late?</p>
+          <p class="body">A shop's Postgres database is captured change by change with Debezium and rebuilt in
+            Databricks: inserts, updates and deletes, with customer history kept. A model predicts which open orders
+            will miss their promise date, and because the causes of lateness were planted, it's checked against the
+            truth, not just a score. AUC about 0.90, against 0.67 from carrier late rates alone.</p>
           <ul class="stack" aria-label="Stack">
-            <li>Postgres</li><li>Debezium</li><li>Kafka</li><li>Databricks</li><li>Delta Lake</li><li>MLflow</li><li>Terraform</li>
+            <li>Postgres</li><li>Debezium</li><li>Databricks</li><li>Lakeflow</li><li>Unity Catalog</li><li>MLflow</li><li>scikit-learn</li><li>GitHub Actions</li>
           </ul>
           <div class="actions">
-            <a class="btn" href="https://github.com/Myselfgitcone">Follow on GitHub</a>
+            <a class="btn primary" href="https://myselfgitcone.github.io/orderline/">Open the page</a>
+            <a class="btn" href="https://github.com/Myselfgitcone/orderline">Code</a>
           </div>
+          <p class="freshness" id="orderline-fresh"></p>
         </div>
         <div class="proof">
-          <h4>What it will show</h4>
+          <h4>What it shows</h4>
           <ul>
-            <li><b>Change data capture.</b> Updates and deletes, not just appends, landing correctly in history tables.</li>
-            <li><b>Messy business data.</b> Late orders, schema changes and slowly changing customers.</li>
-            <li><b>ML in production.</b> A forecast with drift monitoring and retraining, tracked in MLflow.</li>
-            <li><b>Infrastructure as code.</b> The whole cloud setup rebuilds from one Terraform apply.</li>
+            <li><b>Change data capture done safely.</b> The replication slot only moves after a batch is in
+              Databricks, so a failed sync loses nothing. CI replays every captured event and checks it rebuilds the
+              source tables row for row.</li>
+            <li><b>CDC that respects order.</b> Silver applies changes by log position, not timestamps, and gold joins
+              each order to the customer as they were at checkout, even when the source clock went backwards once.</li>
+            <li><b>Honest labels.</b> Orders that haven't reached their promise date are unknown, not on time, and
+              aren't scored once they're overdue.</li>
+            <li><b>Champion and challenger.</b> Weekly retraining in MLflow; a new model is promoted only if it gets
+              the causes right and beats the champion on the same recent orders.</li>
           </ul>
         </div>
       </article>
