@@ -1,77 +1,94 @@
-// Contact links, shown in the nav and footer. Add yours here, e.g.
-//   { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name" },
-//   { label: "Email", href: "mailto:you@example.com" },
-const CONTACT = [];
+// The status board and the per-project live lines read each project's own
+// published data. Every feed is served with an open CORS header. If one can't
+// be reached the board says so; nothing on the page depends on it.
 
-// Grainflow publishes its lake with an open CORS header, so the hub can show
-// how fresh the live data is. Silo reads the same build.
-const LAKE_MANIFEST = "https://grainflow-mauve.vercel.app/data/lake/manifest.json";
+const FEEDS = {
+  orderline: "https://myselfgitcone.github.io/orderline/data/site.json",
+  grainflow: "https://grainflow-mauve.vercel.app/data/lake/manifest.json",
+  footnote: "https://myselfgitcone.github.io/footnote/status.json",
+};
 
-// Orderline's page data on GitHub Pages, which also allows cross-origin reads.
-const ORDERLINE_DATA = "https://myselfgitcone.github.io/orderline/data/site.json";
+const $ = (id) => document.getElementById(id);
+const n = (x) => Number(x).toLocaleString("en-US");
 
-// What Footnote covers right now, written each morning next to its page.
-const FOOTNOTE_STATUS = "https://myselfgitcone.github.io/footnote/status.json";
-
-const stamp = (iso) =>
-  new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
-
-function addContacts() {
-  for (const container of document.querySelectorAll("#contact-links, footer .links")) {
-    for (const { label, href } of CONTACT) {
-      container.append(Object.assign(document.createElement("a"), { textContent: label, href }));
-    }
-  }
+function ago(iso) {
+  const mins = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (mins < 2) return "just now";
+  if (mins < 60) return `${mins} min ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 36) return `${hours} h ago`;
+  return `${Math.round(hours / 24)} days ago`;
 }
 
-async function showFreshness() {
-  const pulse = document.getElementById("pulse-text");
+function show(id, when, line, extra) {
+  const li = $("b-" + id);
+  li.classList.add("on");
+  li.querySelector(".when").textContent = when;
+  li.querySelector(".line").textContent = line;
+  if (extra && $(id + "-live")) $(id + "-live").textContent = extra;
+}
+
+function down(id) {
+  $("b-" + id).querySelector(".when").textContent = "not reachable right now";
+}
+
+async function read(url) {
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+}
+
+async function orderline() {
   try {
-    const manifest = await fetch(LAKE_MANIFEST, { cache: "no-store" }).then((r) => {
-      if (!r.ok) throw new Error(r.status);
-      return r.json();
-    });
-    const rows = manifest.tables.reduce((sum, t) => sum + t.rows, 0);
-    const when = stamp(manifest.generated_at);
-    pulse.textContent = `Live data last updated ${when}. Grainflow rebuilds it four times a day and Silo answers from it.`;
-    document.getElementById("grainflow-fresh").textContent =
-      `Last updated ${when} · ${manifest.tables.length} tables · ${rows.toLocaleString()} rows`;
+    const d = await read(FEEDS.orderline);
+    const s = d.summary;
+    const last = d.syncs?.[d.syncs.length - 1];
+    const synced = s.last_landed || s.generated_at || d.generated_at;
+    show(
+      "orderline",
+      `synced ${ago(synced)}`,
+      `${n(s.orders)} orders · ${n(s.open_orders)} open · ${Math.round(s.late_share_30d * 100)}% late in the last 30 days` +
+        (last ? ` · last sync landed ${n(last.events)} changes` : ""),
+      `Live · ${n(s.orders)} orders captured · synced ${ago(synced)}`
+    );
   } catch {
-    pulse.textContent = "Grainflow and Silo refresh four times a day from public sources.";
+    down("orderline");
   }
 }
 
-async function showOrderline() {
+async function grainflow() {
   try {
-    const data = await fetch(ORDERLINE_DATA, { cache: "no-store" }).then((r) => {
-      if (!r.ok) throw new Error(r.status);
-      return r.json();
-    });
-    const s = data.summary;
-    document.getElementById("orderline-fresh").textContent =
-      `Last updated ${stamp(data.generated_at)} · ${s.orders.toLocaleString()} orders · ` +
-      `${s.open_orders.toLocaleString()} open · ${(s.late_share_30d * 100).toFixed(1)}% late in 30 days`;
+    const d = await read(FEEDS.grainflow);
+    const rows = d.tables.reduce((sum, t) => sum + t.rows, 0);
+    show(
+      "grainflow",
+      `rebuilt ${ago(d.generated_at)}`,
+      `${d.tables.length} gold tables · ${n(rows)} rows · futures, weather and crop ratings`,
+      `Live · ${n(rows)} rows across ${d.tables.length} tables · rebuilt ${ago(d.generated_at)}`
+    );
   } catch {
-    // The card reads fine without it.
+    down("grainflow");
   }
 }
 
-async function showFootnote() {
+async function footnote() {
   try {
-    const s = await fetch(FOOTNOTE_STATUS, { cache: "no-store" }).then((r) => {
-      if (!r.ok) throw new Error(r.status);
-      return r.json();
-    });
-    const latest = s.latest_filing;
-    document.getElementById("footnote-fresh").textContent =
-      `Last updated ${stamp(s.generated_at)} · ${s.companies} companies · ${s.filings} annual reports · ` +
-      `${s.passages.toLocaleString()} passages · newest: ${latest.name || latest.company} FY${latest.fiscal_year}`;
+    const d = await read(FEEDS.footnote);
+    const latest = d.latest_filing;
+    show(
+      "footnote",
+      `indexed ${ago(d.generated_at)}`,
+      `${d.filings} annual reports · ${d.companies} companies · ${n(d.passages)} passages · newest: ${latest.name} FY${latest.fiscal_year}`,
+      `Live · ${d.filings} annual reports · ${n(d.passages)} passages · updated ${ago(d.generated_at)}`
+    );
   } catch {
-    // The card reads fine without it.
+    down("footnote");
   }
 }
 
-addContacts();
-showFreshness();
-showOrderline();
-showFootnote();
+$("board-clock").textContent = new Date().toLocaleString("en-US", {
+  month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short",
+});
+orderline();
+grainflow();
+footnote();
