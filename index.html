@@ -3,285 +3,403 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jagadish Butukuri · Data Engineering</title>
-  <meta name="description" content="Senior data engineer. Live projects: a streaming grain-market lakehouse, an AI analyst over it, a CDC-to-ML pipeline, and cited answers from SEC filings.">
+  <title>Jagadish Butukuri · Senior Data Engineer</title>
+  <meta name="description" content="Senior data engineer. Data platforms at enterprise scale, and the governed AI on top of them. Four live systems on real public data, each with its numbers shown as they are right now.">
+  <meta property="og:title" content="Jagadish Butukuri · Senior Data Engineer">
+  <meta property="og:description" content="Data platforms at enterprise scale, and the AI on top of them. Four live systems you can open.">
+  <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Fragment+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f5f7f1; --surface: #ffffff; --ink: #15231a; --muted: #5d6a5f; --line: #d8ded2;
-      --leaf: #2e7d4f; --leaf-soft: #dcebdf; --corn: #9a6a00; --corn-soft: #fbf0d6;
-      --field: #12251a; --field-2: #1a3324; --field-ink: #eef3ea; --field-muted: #a5b5a7;
-      --kernel: #f2b630; --sprout: #7dd3a0;
-      --display: "Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
-      --body: "IBM Plex Sans", system-ui, sans-serif;
-      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --paper: #f7f6f2;
+      --ink: #15181c;
+      --ink-2: #4a4f57;
+      --rule: #d6d4cc;
+      --board: #121518;
+      --board-ink: #e9e7e0;
+      --board-dim: #8d9199;
+      --live: #1f9d55;
+      --focus: #2b5cff;
+      --sans: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+      --mono: "Fragment Mono", ui-monospace, Menlo, monospace;
+      --w: 1120px;
+      --gutter: clamp(20px, 4vw, 48px);
       color-scheme: light;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0f1712; --surface: #16211a; --ink: #e9efe6; --muted: #9faea1; --line: #2a3a2f;
-        --leaf: #5bc48a; --leaf-soft: #1d3626; --corn: #f2b630; --corn-soft: #33290f;
-        --field: #0b160f; --field-2: #13241a;
+        --paper: #121417; --ink: #ebe9e2; --ink-2: #a3a7ae; --rule: #2c3036;
+        --board: #1c2025; --board-ink: #ebe9e2; --board-dim: #8d9199;
         color-scheme: dark;
       }
     }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
     * { box-sizing: border-box; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
-    a { color: inherit; text-underline-offset: 3px; }
-    :focus-visible { outline: 2px solid var(--kernel); outline-offset: 3px; border-radius: 6px; }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-    .hidden { display: none !important; }
-
-    .hero { background: radial-gradient(120% 100% at 85% 0%, var(--field-2), var(--field) 62%); color: var(--field-ink); padding-bottom: 64px; }
-    .nav { display: flex; justify-content: space-between; align-items: center; padding-top: 22px; font-size: 15px; }
-    .nav a { color: var(--field-muted); text-decoration: none; }
-    .nav a:hover { color: var(--field-ink); }
-    .nav .links { display: flex; gap: 20px; }
-    .initials { font: 800 18px/1 var(--display); color: var(--field-ink) !important; letter-spacing: -.02em; }
-    h1 { font: 800 clamp(44px, 8vw, 92px)/.98 var(--display); letter-spacing: -.045em; margin: 72px 0 18px; }
-    .role { font: 600 clamp(20px, 2.6vw, 26px)/1.3 var(--display); color: var(--kernel); margin: 0 0 18px; letter-spacing: -.01em; }
-    .lede { color: var(--field-muted); font-size: 19px; max-width: 60ch; margin: 0; }
-
-    /* the hero's one visual: how the projects relate */
-    .map { margin-top: 56px; display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: center; gap: 0 10px; }
-    .node { border: 1px solid rgba(238, 243, 234, .18); border-radius: 14px; padding: 14px 16px; background: rgba(255, 255, 255, .04); text-decoration: none; transition: border-color .2s;
-            align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
-    .node:hover { border-color: var(--kernel); }
-    .node b { font: 700 18px/1.2 var(--display); display: block; }
-    .node span { font-size: 14px; color: var(--field-muted); }
-    .node.soon { border-style: dashed; }
-    .edge { font: 500 12px/1.3 var(--mono); color: var(--kernel); text-align: center; min-width: 72px; }
-    .edge::before { content: ""; display: block; height: 2px; margin: 0 auto 6px; width: 100%;
-                    background: repeating-linear-gradient(90deg, var(--kernel) 0 8px, transparent 8px 14px); background-size: 28px 2px; animation: flow 1.2s linear infinite; }
-    .edge.faint { color: var(--field-muted); }
-    .edge.faint::before { background: repeating-linear-gradient(90deg, var(--field-muted) 0 4px, transparent 4px 10px); animation: none; opacity: .5; }
-    @keyframes flow { to { background-position: 28px 0; } }
-    .pulse { margin: 18px 0 0; font-size: 14px; color: var(--field-muted); display: flex; gap: 10px; align-items: center; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sprout); flex: none; animation: live 2.4s ease-out infinite; box-shadow: 0 0 0 0 rgba(125, 211, 160, .6); }
-    @keyframes live { 70% { box-shadow: 0 0 0 9px rgba(125, 211, 160, 0); } 100% { box-shadow: 0 0 0 0 rgba(125, 211, 160, 0); } }
-    @media (max-width: 900px) {
-      .map { grid-template-columns: 1fr; gap: 6px; }
-      .edge { min-width: 0; padding: 4px 0; }
-      .edge::before { width: 2px; height: 22px; background: repeating-linear-gradient(180deg, var(--kernel) 0 6px, transparent 6px 11px); animation: none; }
-      .edge.faint::before { background: repeating-linear-gradient(180deg, var(--field-muted) 0 4px, transparent 4px 9px); }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--paper); color: var(--ink);
+      font: 400 17px/1.55 var(--sans); font-variation-settings: "opsz" 17, "wdth" 100;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
     }
+    a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+    b, strong { font-weight: 650; }
+    .wrap { max-width: var(--w); margin: 0 auto; padding: 0 var(--gutter); }
+    .mono { font-family: var(--mono); font-size: 14px; letter-spacing: 0; }
 
-    main section { padding-top: 72px; }
-    h2 { font: 800 clamp(28px, 3.6vw, 40px)/1.1 var(--display); letter-spacing: -.03em; margin: 0 0 10px; }
-    .sub { color: var(--muted); margin: 0 0 30px; max-width: 64ch; }
-
-    .project { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; padding: 34px 0; border-top: 1px solid var(--line); }
-    .project:first-of-type { border-top: 0; padding-top: 6px; }
-    .status { display: inline-flex; align-items: center; gap: 8px; font: 600 13px var(--body); border-radius: 999px; padding: 3px 11px; }
-    .status.live { color: var(--leaf); background: var(--leaf-soft); }
-    .status.building { color: var(--corn); background: var(--corn-soft); }
-    .status.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
-    .project h3 { font: 800 clamp(28px, 3.2vw, 36px)/1.1 var(--display); letter-spacing: -.03em; margin: 12px 0 8px; }
-    .tagline { font-size: 19px; margin: 0 0 16px; }
-    .project p.body { color: var(--muted); margin: 0 0 16px; }
-    .stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 20px; padding: 0; list-style: none; }
-    .stack li { font: 500 13px var(--mono); border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; color: var(--muted); }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .btn { display: inline-block; text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 10px; padding: 9px 16px; border: 1px solid var(--line); background: var(--surface); }
-    .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-    .btn:hover { border-color: var(--leaf); }
-    .proof h4 { font: 700 16px/1.3 var(--display); margin: 0 0 10px; }
-    .proof ul { margin: 0; padding: 0; list-style: none; }
-    .proof li { padding: 9px 0 9px 22px; border-bottom: 1px dashed var(--line); color: var(--muted); font-size: 16px; position: relative; }
-    .proof li::before { content: ""; position: absolute; left: 2px; top: 17px; width: 8px; height: 8px; border-radius: 2px; background: var(--leaf); }
-    .proof li b { color: var(--ink); font-weight: 600; }
-    .freshness { margin-top: 14px; font-size: 14px; color: var(--muted); }
-
-    .practice { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
-    .practice h3 { font: 700 19px/1.3 var(--display); margin: 0 0 8px; }
-    .practice p { margin: 0; color: var(--muted); font-size: 16px; }
-
-    footer { margin-top: 88px; padding: 28px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-    footer .links { display: flex; gap: 18px; }
-
-    @media (max-width: 820px) {
-      .project, .practice { grid-template-columns: 1fr; gap: 22px; }
-      h1 { margin-top: 48px; }
+    /* ---------- nav ---------- */
+    nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; }
+    nav .name { font-weight: 650; text-decoration: none; }
+    nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
+    nav ul a { text-decoration: none; color: var(--ink-2); }
+    nav ul a:hover { color: var(--ink); text-decoration: underline; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 6px;
+      border: 1px solid var(--ink); text-decoration: none; font-weight: 550; line-height: 1;
     }
-    @media (prefers-reduced-motion: reduce) { .edge::before, .dot { animation: none !important; } .node { transition: none; } }
+    .btn:hover { background: var(--ink); color: var(--paper); text-decoration: none; }
+    .btn.solid { background: var(--ink); color: var(--paper); }
+    .btn.solid:hover { opacity: .88; }
+
+    /* ---------- hero ---------- */
+    .hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 6vw, 72px); align-items: start; padding: clamp(28px, 6vh, 64px) 0 56px; }
+    h1 {
+      margin: 0 0 20px; font-weight: 560; letter-spacing: -0.028em; line-height: .98;
+      font-size: clamp(38px, 4.6vw, 62px); font-variation-settings: "opsz" 96, "wdth" 85;
+      text-wrap: balance;
+    }
+    .hero .lede { margin: 0 0 22px; font-size: clamp(19px, 2.1vw, 23px); line-height: 1.4; max-width: 30ch; text-wrap: pretty; }
+    .hero .facts { margin: 0 0 28px; color: var(--ink-2); max-width: 60ch; text-wrap: pretty; }
+    .hero .facts b { color: var(--ink); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    /* the one bold element: a status board fed by the systems themselves */
+    .board {
+      background: var(--board); color: var(--board-ink); border-radius: 10px; padding: 22px 24px 18px; margin-top: 10px;
+      font-family: var(--mono); font-size: 14px; line-height: 1.5; box-shadow: 0 30px 60px -40px rgba(0,0,0,.5);
+    }
+    .board h2 { margin: 0 0 14px; font: 500 12px/1 var(--mono); color: var(--board-dim); text-transform: none; display: flex; justify-content: space-between; gap: 12px; }
+    .board ol { list-style: none; margin: 0; padding: 0; }
+    .board li { display: grid; grid-template-columns: 14px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.09); opacity: 0; transform: translateY(4px); animation: boot .5s ease-out forwards; }
+    .board li:nth-child(2) { animation-delay: .12s; } .board li:nth-child(3) { animation-delay: .24s; }
+    @keyframes boot { to { opacity: 1; transform: none; } }
+    .board .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--board-dim); margin-top: 7px; }
+    .board li.on .dot { background: var(--live); box-shadow: 0 0 0 0 rgba(31,157,85,.6); animation: pulse 2.4s ease-out infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(31,157,85,.55); } 70% { box-shadow: 0 0 0 8px rgba(31,157,85,0); } 100% { box-shadow: 0 0 0 0 rgba(31,157,85,0); } }
+    .board .sys { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .board .sys a { color: var(--board-ink); text-decoration: none; font-weight: 500; }
+    .board .sys a:hover { text-decoration: underline; }
+    .board .when { color: var(--board-dim); }
+    .board .line { color: var(--board-ink); margin-top: 2px; }
+    .board .note { margin: 14px 0 0; color: var(--board-dim); font-size: 12.5px; }
+
+    /* ---------- sections ---------- */
+    section { padding: 64px 0 24px; }
+    section > .wrap > h2, .section-title { margin: 0 0 8px; font-size: clamp(28px, 3.2vw, 40px); font-weight: 560; letter-spacing: -0.02em; line-height: 1.1; font-variation-settings: "opsz" 40, "wdth" 92; }
+    .intro { margin: 0 0 36px; color: var(--ink-2); max-width: 62ch; text-wrap: pretty; }
+
+    /* projects as dossiers, not cards */
+    .project { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(24px, 5vw, 72px); padding: 40px 0 44px; border-top: 1px solid var(--rule); }
+    .project h3 { margin: 0 0 6px; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; font-variation-settings: "opsz" 30, "wdth" 92; }
+    .project .what { margin: 0 0 16px; color: var(--ink-2); text-wrap: pretty; }
+    .project .live { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 13px; color: var(--ink-2); margin: 0 0 14px; }
+    .project .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--live); flex: none; }
+    .project .links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 0 0 18px; }
+    .project .stack { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.5; }
+    .project .stack b { color: var(--ink); font-weight: 550; }
+    .star { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 32px; }
+    .star > div p { margin: 0; text-wrap: pretty; }
+    .star > div p::before { content: attr(data-k) ". "; font-weight: 650; }
+    .star .wide { grid-column: 1 / -1; }
+    .star ul { margin: 0; padding-left: 20px; }
+    .star li { margin: 0 0 8px; text-wrap: pretty; }
+    .star li::marker { color: var(--ink-2); }
+    .star .k { font-weight: 650; }
+
+    /* experience as a timeline (it is a sequence) */
+    .job { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding: 28px 0; border-top: 1px solid var(--rule); }
+    .job .when { font-family: var(--mono); font-size: 13px; color: var(--ink-2); padding-top: 5px; }
+    .job h3 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.01em; }
+    .job h3 span { color: var(--ink-2); font-weight: 450; }
+    .job .scope { margin: 6px 0 12px; color: var(--ink-2); text-wrap: pretty; }
+    .job ul { margin: 0; padding-left: 20px; }
+    .job li { margin: 0 0 6px; }
+    .job li::marker { color: var(--ink-2); }
+
+    /* skills as plain reading lines */
+    .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 48px; }
+    .skills div { padding: 14px 0; border-top: 1px solid var(--rule); }
+    .skills h3 { margin: 0 0 4px; font-size: 17px; font-weight: 650; }
+    .skills p { margin: 0; color: var(--ink-2); text-wrap: pretty; }
+    .also { margin: 22px 0 0; color: var(--ink-2); font-size: 15px; border-top: 1px solid var(--rule); padding-top: 14px; }
+
+    /* contact */
+    .contact { padding: 72px 0 40px; }
+    .contact h2 { max-width: 20ch; }
+    .contact p { color: var(--ink-2); max-width: 50ch; margin: 0 0 22px; }
+    footer { padding: 24px 0 40px; color: var(--ink-2); font-size: 14px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--rule); }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; align-items: start; padding-top: 28px; }
+      .project { grid-template-columns: 1fr; gap: 22px; }
+      .star { grid-template-columns: 1fr; gap: 18px; }
+      .job { grid-template-columns: 1fr; gap: 6px; }
+      .skills { grid-template-columns: 1fr; }
+      nav ul { display: none; }
+      nav .name { white-space: nowrap; }
+      nav .btn { white-space: nowrap; padding: 9px 12px; font-size: 15px; }
+      .btn { white-space: nowrap; }
+    }
   </style>
 </head>
 <body>
-  <header class="hero">
-    <nav class="wrap nav" aria-label="Site">
-      <a class="initials" href="/">JB</a>
-      <div class="links" id="contact-links">
-        <a href="#work">Work</a>
-        <a href="https://github.com/Myselfgitcone">GitHub</a>
-      </div>
+  <div class="wrap">
+    <nav aria-label="Site">
+      <a class="name" href="#top">Jagadish Butukuri</a>
+      <ul>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a class="btn" href="Jagadish_Butukuri_Resume.pdf" download>Résumé (PDF)</a>
     </nav>
-    <div class="wrap">
-      <h1>Jagadish Butukuri</h1>
-      <p class="role">Senior data engineer. Pipelines, lakehouses, and the AI on top of them.</p>
-      <p class="lede">Working systems, each live and refreshing on real data. Every one is built
-        the way I'd build it at work: tested, documented, guarded, and cheap to run.</p>
 
-      <div class="map" aria-label="How the projects connect">
-        <a class="node" href="#grainflow"><b>Grainflow</b><span>Streaming lakehouse</span></a>
-        <div class="edge">gold tables<br>as Parquet</div>
-        <a class="node" href="#silo"><b>Silo</b><span>AI analyst over MCP</span></a>
-        <div class="edge faint">same<br>practices</div>
-        <a class="node" href="#orderline"><b>Orderline</b><span>CDC to a late-delivery model</span></a>
-        <div class="edge faint">same<br>practices</div>
-        <a class="node" href="#footnote"><b>Footnote</b><span>Cited answers from SEC filings</span></a>
+    <header class="hero" id="top">
+      <div>
+        <h1>Data platforms that run at enterprise scale, and the AI on top of them.</h1>
+        <p class="lede">I'm Jagadish Butukuri, a senior data engineer in St. Louis.</p>
+        <p class="facts">Five years at <b>JPMorgan Chase</b>, <b>Molina Healthcare</b> and <b>Cargill</b>: pipelines handling <b>hundreds of millions</b> of banking transactions a day, a healthcare refresh cut from <b>six hours to under one</b>, and <b>$100K a year</b> saved on Databricks. Production RAG and MCP servers over governed data. Open to senior and lead data &amp; AI platform roles, remote or on site.</p>
+        <div class="actions">
+          <a class="btn solid" href="#work">See the four live systems</a>
+          <a class="btn" href="https://www.linkedin.com/in/jagadish33/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="https://github.com/Myselfgitcone" target="_blank" rel="noopener">GitHub</a>
+        </div>
       </div>
-      <p class="pulse" id="pulse"><span class="dot" aria-hidden="true"></span><span id="pulse-text">Checking the live data</span></p>
-    </div>
-  </header>
 
-  <main class="wrap">
+      <aside class="board" aria-label="Live status of the projects">
+        <h2><span>Running right now</span><span id="board-clock"></span></h2>
+        <ol>
+          <li id="b-orderline"><span class="dot"></span><div><div class="sys"><a href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Orderline</a><span class="when">checking…</span></div><div class="line">CDC from Postgres into Databricks, scored for late delivery</div></div></li>
+          <li id="b-grainflow"><span class="dot"></span><div><div class="sys"><a href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Grainflow</a><span class="when">checking…</span></div><div class="line">Streaming lakehouse: futures, weather, crop ratings</div></div></li>
+          <li id="b-footnote"><span class="dot"></span><div><div class="sys"><a href="https://myselfgitcone.github.io/footnote/" target="_blank" rel="noopener">Footnote</a><span class="when">checking…</span></div><div class="line">Cited answers from SEC 10-K filings</div></div></li>
+        </ol>
+        <p class="note">These numbers are read from the systems themselves when this page opens.</p>
+      </aside>
+    </header>
+
     <section id="work">
       <h2>Work</h2>
-      <p class="sub">Each project answers a real question end to end, from raw sources to something a person can use.</p>
+      <p class="intro">Four systems I built end to end on real public data, each still running on a schedule. For each one: the situation, the task, what I did, and what came of it.</p>
 
-      <article class="project" id="grainflow">
+      <article class="project" id="footnote">
         <div>
-          <span class="status live">Live</span>
-          <h3>Grainflow</h3>
-          <p class="tagline">When US corn crop ratings fall, does corn rise the next week?</p>
-          <p class="body">A streaming lakehouse that joins CBOT futures, NOAA weather and USDA crop ratings, then
-            answers that question with nine seasons of data. Yes, modestly: corn gained about 0.9% the week
-            after ratings fell, and the gap is statistically significant.</p>
-          <ul class="stack" aria-label="Stack">
-            <li>Kafka</li><li>Spark Streaming</li><li>Iceberg</li><li>Trino</li><li>dbt</li><li>Dagster</li><li>DuckDB</li>
-          </ul>
-          <div class="actions">
-            <a class="btn primary" href="https://grainflow-mauve.vercel.app">Open the dashboard</a>
-            <a class="btn" href="https://github.com/Myselfgitcone/grainflow">Code</a>
+          <h3>Footnote</h3>
+          <p class="what">Ask about twenty public companies' annual reports and get an answer where every claim cites its passage and every figure is the number filed with the SEC.</p>
+          <p class="live"><i></i><span id="footnote-live">Live, refreshed every morning</span></p>
+          <p class="links"><a href="https://myselfgitcone.github.io/footnote/" target="_blank" rel="noopener">Ask it a question</a><a href="https://github.com/Myselfgitcone/footnote" target="_blank" rel="noopener">Code on GitHub</a></p>
+          <p class="stack"><b>Built with</b> AWS Lambda, S3, EventBridge, Terraform, Pinecone, LangChain, LangGraph, LangSmith, Claude, bge-small on ONNX, FastAPI, GitHub Actions.</p>
+        </div>
+        <div class="star">
+          <div><p data-k="Situation">Financial questions are a common use for LLMs, but models invent numbers and misread tables, and a single 10-K runs hundreds of pages, so answers are hard to trust or check.</p></div>
+          <div><p data-k="Task">Build a production-style RAG system over SEC filings where every claim carries a citation, every number is the officially filed figure, and answer quality is measured automatically.</p></div>
+          <div class="wide"><p data-k="Action"></p>
+            <ul>
+              <li>A daily serverless pipeline on AWS pulls 10-Ks from SEC EDGAR into S3 and splits them into sections, all provisioned with Terraform.</li>
+              <li>Sections are cut into overlapping passages and embedded on CPU with bge-small, which avoided paying for about <span class="k">10 million tokens</span> of hosted embeddings, then indexed in Pinecone with their source.</li>
+              <li>A LangGraph pipeline: Claude plans the question, text search and an exact-figure lookup from XBRL run in parallel, then Claude writes an answer that may cite only what was retrieved.</li>
+              <li>A <span class="k">29-question</span> evaluation suite in LangSmith with a stronger model as judge, run as a CI gate that blocks any change that lowers answer quality.</li>
+              <li>Found and fixed a real data problem: Exxon's ticker moved to a new holding company in 2026 and its filings silently vanished. Ingest now follows predecessor registrants and flags any company that comes back empty.</li>
+            </ul>
           </div>
-          <p class="freshness" id="grainflow-fresh"></p>
-        </div>
-        <div class="proof">
-          <h4>What it shows</h4>
-          <ul>
-            <li><b>Contracts as code.</b> One YAML per dataset drives validation, schemas, tests and freshness alerts.</li>
-            <li><b>A real bug caught in the model.</b> Equal-weighting 41 states diluted the signal; the mart now uses USDA's 18.</li>
-            <li><b>Production fixes.</b> A Spark out-of-memory on a 10-year backfill, solved by switching Iceberg to clustered writes.</li>
-            <li><b>Runs for free.</b> The same dbt models rebuild on DuckDB four times a day on Vercel.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="project" id="silo">
-        <div>
-          <span class="status live">Live</span>
-          <h3>Silo</h3>
-          <p class="tagline">Ask Grainflow's data a question in plain English and get the numbers, with the SQL behind them.</p>
-          <p class="body">An MCP server and an AI analyst over Grainflow's gold tables. Any MCP client can use the
-            same tools. It can only read, it shows its work, and 13 graded questions gate every change.</p>
-          <ul class="stack" aria-label="Stack">
-            <li>MCP</li><li>Anthropic API</li><li>DuckDB</li><li>sqlglot</li><li>Python</li><li>Railway</li>
-          </ul>
-          <div class="actions">
-            <a class="btn primary" href="https://silo-production-9efb.up.railway.app">Ask it something</a>
-            <a class="btn" href="https://github.com/Myselfgitcone/silo">Code</a>
+          <div class="wide"><p data-k="Result"></p>
+            <ul>
+              <li><span class="k">106 annual reports, 20 companies, about 27,000 passages</span>, refreshed every morning.</li>
+              <li><span class="k">100%</span> of figure questions answered with the exact filed number, such as Apple's fiscal 2024 revenue of <span class="k">$391,035 million</span>.</li>
+              <li>Grounding went from <span class="k">87% to 100%</span> after the first eval run caught cut-off answers and an invented quote.</li>
+              <li>Runs inside the AWS free tier with a <span class="k">$1 a month</span> budget alarm, at about <span class="k">$0.002</span> a question.</li>
+            </ul>
           </div>
-        </div>
-        <div class="proof">
-          <h4>What it shows</h4>
-          <ul>
-            <li><b>Guardrails that hold.</b> A parser allows one read-only SELECT, and the engine itself can't touch files or the network.</li>
-            <li><b>Evals against live data.</b> Expected answers are computed by SQL at test time; the first run caught a wrong ranking.</li>
-            <li><b>A semantic layer.</b> Named metrics carry analyst rules, like never averaging corn with soybeans.</li>
-            <li><b>Bounded cost.</b> About a tenth of a cent per answer, a daily budget, and per-visitor limits.</li>
-          </ul>
         </div>
       </article>
 
       <article class="project" id="orderline">
         <div>
-          <span class="status live">Live</span>
           <h3>Orderline</h3>
-          <p class="tagline">Will this order arrive late?</p>
-          <p class="body">A shop's Postgres database is captured change by change with Debezium and rebuilt in
-            Databricks: inserts, updates and deletes, with customer history kept. A model predicts which open orders
-            will miss their promise date, and because the causes of lateness were planted, it's checked against the
-            truth, not just a score. AUC about 0.90, against 0.67 from carrier late rates alone.</p>
-          <ul class="stack" aria-label="Stack">
-            <li>Postgres</li><li>Debezium</li><li>Databricks</li><li>Lakeflow</li><li>Unity Catalog</li><li>MLflow</li><li>scikit-learn</li><li>GitHub Actions</li>
-          </ul>
-          <div class="actions">
-            <a class="btn primary" href="https://myselfgitcone.github.io/orderline/">Open the page</a>
-            <a class="btn" href="https://github.com/Myselfgitcone/orderline">Code</a>
-          </div>
-          <p class="freshness" id="orderline-fresh"></p>
+          <p class="what">A live Postgres shop database captured change by change with Debezium and rebuilt in Databricks, with a model that predicts which orders will arrive late.</p>
+          <p class="live"><i></i><span id="orderline-live">Live, synced every six hours</span></p>
+          <p class="links"><a href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Open the page</a><a href="https://github.com/Myselfgitcone/orderline" target="_blank" rel="noopener">Code on GitHub</a></p>
+          <p class="stack"><b>Built with</b> Postgres, Debezium, Databricks, Lakeflow, Unity Catalog, Delta Lake, MLflow, scikit-learn, GitHub Actions.</p>
         </div>
-        <div class="proof">
-          <h4>What it shows</h4>
-          <ul>
-            <li><b>Change data capture done safely.</b> The replication slot only moves after a batch is in
-              Databricks, so a failed sync loses nothing. CI replays every captured event and checks it rebuilds the
-              source tables row for row.</li>
-            <li><b>CDC that respects order.</b> Silver applies changes by log position, not timestamps, and gold joins
-              each order to the customer as they were at checkout, even when the source clock went backwards once.</li>
-            <li><b>Honest labels.</b> Orders that haven't reached their promise date are unknown, not on time, and
-              aren't scored once they're overdue.</li>
-            <li><b>Champion and challenger.</b> Weekly retraining in MLflow; a new model is promoted only if it gets
-              the causes right and beats the champion on the same recent orders.</li>
-          </ul>
+        <div class="star">
+          <div><p data-k="Situation">CDC pipelines lose or duplicate changes when a sync fails, and late-delivery models are often trained on mislabeled data, with in-transit orders counted as on time.</p></div>
+          <div><p data-k="Task">Capture every insert, update and delete from a live order database into Databricks without losing or misordering a change, and build a late-delivery model that can be checked against known ground truth.</p></div>
+          <div class="wide"><p data-k="Action"></p>
+            <ul>
+              <li>Changes stream from a Postgres replication slot through Debezium; the slot only advances after a batch has landed in Databricks, so a failed sync loses nothing.</li>
+              <li>A Lakeflow bronze, silver and gold pipeline applies changes in log order with SCD Type 1 and 2, and joins each order to the customer as they were at checkout.</li>
+              <li>A gradient-boosted model with censoring-aware labels: orders not yet due are unknown, not on time, with a time-based train/test split.</li>
+              <li>Known causes of lateness were planted in the source data, so the model is graded on finding the real causes, not just on a score. MLflow promotes a challenger only when it beats the champion.</li>
+              <li>CI replays every captured event and checks it rebuilds the source tables row for row.</li>
+            </ul>
+          </div>
+          <div class="wide"><p data-k="Result"></p>
+            <ul>
+              <li>Model <span class="k">AUC 0.90</span>, against <span class="k">0.67</span> from carrier late rates alone.</li>
+              <li><span class="k">All four</span> planted causes of lateness identified.</li>
+              <li><span class="k">Zero lost changes</span>: replayed duplicates are removed by log position, proven by row-for-row replay checks in CI.</li>
+              <li>Syncs every <span class="k">six hours</span>, with a live page showing predictions and the model's track record.</li>
+            </ul>
+          </div>
         </div>
       </article>
 
-      <article class="project" id="footnote">
+      <article class="project" id="grainflow">
         <div>
-          <span class="status live">Live</span>
-          <h3>Footnote</h3>
-          <p class="tagline">What do these companies' annual reports actually say?</p>
-          <p class="body">Ask about twenty public companies' 10-K filings and get an answer where every claim
-            cites the passage it came from, and every figure is the exact number filed with the SEC. Filings flow
-            from SEC EDGAR into S3 each morning, are split into sections, embedded on CPU and searched in
-            Pinecone; a LangGraph pipeline plans the question, searches the text and looks up the figures in
-            parallel, and Claude writes the answer from what was found.</p>
-          <ul class="stack" aria-label="Stack">
-            <li>SEC EDGAR</li><li>AWS Lambda</li><li>S3</li><li>Terraform</li><li>Pinecone</li><li>bge-small on ONNX</li><li>LangGraph</li><li>LangChain</li><li>Claude</li><li>LangSmith</li><li>FastAPI</li>
-          </ul>
-          <div class="actions">
-            <a class="btn primary" href="https://myselfgitcone.github.io/footnote/">Ask it something</a>
-            <a class="btn" href="https://github.com/Myselfgitcone/footnote">Code</a>
-          </div>
-          <p class="freshness" id="footnote-fresh"></p>
+          <h3>Grainflow</h3>
+          <p class="what">A streaming lakehouse joining CBOT futures, NOAA weather and USDA crop ratings to answer one market question with evidence.</p>
+          <p class="live"><i></i><span id="grainflow-live">Live, rebuilt four times a day</span></p>
+          <p class="links"><a href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Open the dashboard</a><a href="https://github.com/Myselfgitcone/grainflow" target="_blank" rel="noopener">Code on GitHub</a></p>
+          <p class="stack"><b>Built with</b> Kafka, Spark Structured Streaming, Apache Iceberg, Trino, dbt, Dagster, DuckDB, GitHub Actions.</p>
         </div>
-        <div class="proof">
-          <h4>What it shows</h4>
-          <ul>
-            <li><b>Numbers that are the filed numbers.</b> Figures come from each 10-K's XBRL data, matched by
-              accession and period, never read off the text. Apple's fiscal 2024 revenue is exactly $391,035 million.</li>
-            <li><b>Every claim cited.</b> The answer may cite only what was retrieved; citations to anything else
-              are dropped before you see them.</li>
-            <li><b>Evals that gate every change.</b> 29 questions with answers taken from the SEC, scored in
-              LangSmith with a stronger model as judge. The first run caught cut-off answers and an invented quote;
-              the fixes took grounding from 87% to 100%.</li>
-            <li><b>A real data problem, found and handled.</b> Exxon's ticker moved to a new holding company in 2026,
-              so its filings vanished without an error. Ingest now follows predecessor registrants and flags any
-              company that comes back empty.</li>
-          </ul>
+        <div class="star">
+          <div><p data-k="Situation">Market, weather and crop data arrive from different public sources at different speeds and in different shapes, so answering "when US corn ratings fall, does corn rise the next week?" needs a trustworthy pipeline first.</p></div>
+          <div><p data-k="Task">Build a streaming lakehouse where one set of data contracts governs every dataset from producer to gold table, then use it to answer the question with statistical evidence.</p></div>
+          <div class="wide"><p data-k="Action"></p>
+            <ul>
+              <li>One YAML contract per dataset drives validation, schemas, tests and freshness alerts; invalid records go to a dead-letter queue or quarantine table, never the lake.</li>
+              <li>Kafka and Spark Structured Streaming land data in Apache Iceberg; dbt on Trino models silver and gold, orchestrated by Dagster with freshness checks and nightly compaction.</li>
+              <li>Fixed a Spark out-of-memory failure on a ten-year backfill by switching Iceberg to clustered writes.</li>
+              <li>Caught a modeling bug: averaging 41 states diluted the signal, so the mart now uses USDA's official 18 states.</li>
+              <li>The same dbt models run on DuckDB to publish a free public dashboard four times a day.</li>
+            </ul>
+          </div>
+          <div class="wide"><p data-k="Result"></p>
+            <ul>
+              <li>Corn rose <span class="k">0.93%</span> the week after ratings fell and fell <span class="k">0.79%</span> after they rose, significant over <span class="k">257 weeks</span> (p ≈ 0.01).</li>
+              <li><span class="k">9,049</span> daily price bars and <span class="k">68,730</span> crop-condition rows loaded, with <span class="k">no row</span> failing its contract.</li>
+              <li><span class="k">44 unit tests and 60 dbt nodes</span> run in CI on every change.</li>
+              <li>Runs for free, refreshed <span class="k">four times a day</span>.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="project" id="silo">
+        <div>
+          <h3>Silo</h3>
+          <p class="what">Ask Grainflow's data a question in plain English and get the numbers with the SQL behind them, through an MCP server any AI client can use.</p>
+          <p class="live"><i></i><span>Live, answers from Grainflow's latest build</span></p>
+          <p class="links"><a href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Ask it a question</a><a href="https://github.com/Myselfgitcone/silo" target="_blank" rel="noopener">Code on GitHub</a></p>
+          <p class="stack"><b>Built with</b> MCP, Anthropic API, DuckDB, sqlglot, Python, Railway.</p>
+        </div>
+        <div class="star">
+          <div><p data-k="Situation">Letting an LLM write SQL against real data is risky: it can run unsafe queries, average the wrong columns, or return a confident wrong number.</p></div>
+          <div><p data-k="Task">Let any AI agent answer questions about the Grainflow lakehouse safely, accurately and cheaply, and prove it with tests.</p></div>
+          <div class="wide"><p data-k="Action"></p>
+            <ul>
+              <li>An MCP server with six tools and a semantic metrics layer that encodes analyst rules, such as never averaging corn with soybeans.</li>
+              <li>Two locks on free-form SQL: a sqlglot parser that allows exactly one read-only SELECT, and a database engine configured so it cannot touch files or the network even if a query slips through.</li>
+              <li>An agent with a daily budget, a step cap and prompt caching, showing every tool call, query, cost and latency to the user.</li>
+              <li>Evals whose expected answers are computed by SQL at test time, so they stay correct as the data refreshes, run as a CI gate.</li>
+            </ul>
+          </div>
+          <div class="wide"><p data-k="Result"></p>
+            <ul>
+              <li><span class="k">13 graded questions</span> gate every change; the first run caught a wrong ranking, fixed by letting the database rank instead of the model.</li>
+              <li>About <span class="k">$0.001</span> an answer, with a daily budget and per-visitor limits.</li>
+              <li><span class="k">Read-only by design</span>: unsafe queries are rejected with a reason the agent can act on.</li>
+            </ul>
+          </div>
         </div>
       </article>
     </section>
 
-    <section>
-      <h2>How I work</h2>
-      <p class="sub">The same habits run through all of them.</p>
-      <div class="practice">
-        <div><h3>Trust the data first</h3><p>Contracts, tests and quarantine tables before dashboards. A number nobody can check isn't an answer.</p></div>
-        <div><h3>Measure the AI</h3><p>Models get the same treatment as pipelines: guardrails, traces, and evals that fail a PR when accuracy drops.</p></div>
-        <div><h3>Ship it small</h3><p>Every change is a reviewed PR with green CI. Everything here runs live on free or near-free infrastructure.</p></div>
+    <section id="experience">
+      <h2>Experience</h2>
+      <p class="intro">Banking, healthcare and agribusiness, in that order.</p>
+
+      <div class="job">
+        <div class="when">Sep 2024 – now</div>
+        <div>
+          <h3>Senior Data Engineer <span>· Cargill, Minneapolis</span></h3>
+          <p class="scope">Owns Cargill's cloud-native data and AI platform on AWS and Databricks for supply-chain, procurement, commodity and logistics data.</p>
+          <ul>
+            <li>Built an ELT platform ingesting <b>terabytes of data daily</b>, and replaced scheduled batch jobs with near-real-time delivery using Spark Structured Streaming and Kafka.</li>
+            <li>Shipped <b>production RAG</b> on LangChain, OpenAI and Pinecone that cut manual document classification, plus <b>MCP servers</b> that let AI apps query governed Delta Lake data securely.</li>
+            <li>Optimized PySpark and Databricks workloads for <b>$100K+ a year</b> in savings, moved orchestration from Airflow to Dagster, and rolled out dbt Mesh for governed self-service data products.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="job">
+        <div class="when">Jan 2021 – Jul 2022</div>
+        <div>
+          <h3>Data Engineer <span>· Molina Healthcare, Long Beach</span></h3>
+          <p class="scope">HIPAA-compliant healthcare data platforms on Azure across member, provider, claims, pharmacy and clinical data.</p>
+          <ul>
+            <li>Cut full-refresh processing from <b>about six hours to under one</b> with CDC and incremental loading.</li>
+            <li>Built <b>real-time HL7/FHIR</b> patient-event ingestion with Azure Event Hubs and Databricks for clinical dashboards.</li>
+            <li>Applied HIPAA controls (PHI de-identification, Key Vault, Purview, RBAC) and Data Vault 2.0 and dimensional models.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="job">
+        <div class="when">Dec 2018 – Dec 2020</div>
+        <div>
+          <h3>Data Engineer <span>· JPMorgan Chase, New York</span></h3>
+          <p class="scope">Large-scale Spark and Databricks pipelines on AWS for fraud, risk, analytics and regulatory reporting.</p>
+          <ul>
+            <li>Processed <b>hundreds of millions</b> of retail-banking transactions daily.</li>
+            <li><b>Migrated a legacy SQL Server warehouse to Snowflake</b> for analytics and regulatory reporting.</li>
+            <li>Built real-time Kafka streams with Confluent Schema Registry, plus low-latency fraud-signal stores in Cassandra and Redis.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="job">
+        <div class="when">2022 – 2024</div>
+        <div>
+          <h3>M.S. Information Systems <span>· Saint Louis University</span></h3>
+          <p class="scope">AWS Certified AI Practitioner and AWS Certified Cloud Practitioner.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <p class="intro">What I use, grouped by what it's for. Each line is backed by a project above or a job.</p>
+      <div class="skills">
+        <div><h3>Languages</h3><p>Python, SQL, PySpark</p></div>
+        <div><h3>Data platforms</h3><p>Databricks, Apache Spark (batch and Structured Streaming), Delta Lake, Apache Iceberg, Snowflake</p></div>
+        <div><h3>Streaming and CDC</h3><p>Kafka, Kafka Connect, Confluent Schema Registry, Debezium</p></div>
+        <div><h3>Modeling and data quality</h3><p>dbt (including Mesh), dimensional modeling, Data Vault 2.0, data contracts, Great Expectations, Monte Carlo</p></div>
+        <div><h3>GenAI and ML</h3><p>RAG, LangChain, LangGraph, LangSmith, Pinecone, MCP, LLM evals, MLflow, SageMaker</p></div>
+        <div><h3>Cloud and infrastructure</h3><p>AWS (S3, Lambda, Glue, Redshift, Step Functions, IAM), Azure (Data Factory, Synapse, Event Hubs), Terraform</p></div>
+        <div><h3>Orchestration</h3><p>Airflow, Dagster</p></div>
+        <div><h3>Regulated data</h3><p>HIPAA, HL7/FHIR, PHI de-identification, RBAC</p></div>
+      </div>
+      <p class="also">Also worked with Feast, Soda, Fivetran, Airbyte, Informatica, Cassandra, Redis, CloudFormation and CDK, Docker, GitHub Actions, Power BI.</p>
+    </section>
+
+    <section class="contact" id="contact">
+      <h2 class="section-title">Building a data or AI platform that has to work at scale? Let's talk.</h2>
+      <p>Email is quickest. I'm in St. Louis and open to remote, hybrid or on-site work across the US.</p>
+      <div class="actions">
+        <a class="btn solid" href="mailto:jagadishbutukuri33@gmail.com">Email me</a>
+        <a class="btn" href="https://www.linkedin.com/in/jagadish33/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/Myselfgitcone" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="Jagadish_Butukuri_Resume.pdf" download>Download résumé</a>
       </div>
     </section>
 
     <footer>
-      <span>Jagadish Butukuri</span>
-      <span class="links"><a href="https://github.com/Myselfgitcone">GitHub</a></span>
+      <span>Jagadish Butukuri · St. Louis, MO</span>
+      <span>Built by hand. The live numbers above come from each project's own published data.</span>
     </footer>
-  </main>
-
+  </div>
   <script src="app.js"></script>
 </body>
 </html>
