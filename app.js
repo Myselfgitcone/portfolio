@@ -10,6 +10,9 @@ const LAKE_MANIFEST = "https://grainflow-mauve.vercel.app/data/lake/manifest.jso
 // Orderline's page data on GitHub Pages, which also allows cross-origin reads.
 const ORDERLINE_DATA = "https://myselfgitcone.github.io/orderline/data/site.json";
 
+// What Footnote covers right now, written each morning next to its page.
+const FOOTNOTE_STATUS = "https://myselfgitcone.github.io/footnote/status.json";
+
 const stamp = (iso) =>
   new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
 
@@ -53,6 +56,22 @@ async function showOrderline() {
   }
 }
 
+async function showFootnote() {
+  try {
+    const s = await fetch(FOOTNOTE_STATUS, { cache: "no-store" }).then((r) => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    });
+    const latest = s.latest_filing;
+    document.getElementById("footnote-fresh").textContent =
+      `Last updated ${stamp(s.generated_at)} · ${s.companies} companies · ${s.filings} annual reports · ` +
+      `${s.passages.toLocaleString()} passages · newest: ${latest.name || latest.company} FY${latest.fiscal_year}`;
+  } catch {
+    // The card reads fine without it.
+  }
+}
+
 addContacts();
 showFreshness();
 showOrderline();
+showFootnote();
