@@ -92,3 +92,13 @@ $("board-clock").textContent = new Date().toLocaleString("en-US", {
 orderline();
 grainflow();
 footnote();
+
+// Sections ease in as they come into view. Off when the visitor prefers less motion.
+if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+  document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
+} else {
+  const seen = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); seen.unobserve(e.target); }
+  }, { rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll(".reveal").forEach((el) => seen.observe(el));
+}
