@@ -309,6 +309,12 @@
     .contact p { margin: 0 0 22px; max-width: 50ch; color: rgba(255,255,255,.85); }
     .contact .btn { background: #fff; color: #121a2e; border-color: #fff; }
     .contact .btn.ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.5); }
+    .contact #copy-email svg { width: 16px; height: 16px; }
+    .contact #copy-email .ok { display: none; color: var(--live); }
+    .contact #copy-email.done .cp { display: none; }
+    .contact #copy-email.done .ok { display: inline; }
+    .contact .copied { margin: 14px 0 0; font: 500 14px/1.4 var(--mono); color: rgba(255,255,255,.9); }
+    .contact .copied .addr { font-weight: 700; color: #fff; user-select: all; }
     footer { padding: 16px 0 40px; color: var(--ink-2); font-size: 14px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
     footer a { color: inherit; }
 
@@ -645,16 +651,17 @@
       <h2>Need a data platform that holds up, or an AI system you can trust? Let's talk.</h2>
       <p>Email is quickest; I reply within a day. Based in St. Louis, open to remote, hybrid or on-site anywhere in the US. Authorized to work in the US.</p>
       <div class="actions">
-        <a class="btn" href="mailto:jagadishbutukuri33@gmail.com">Email me</a>
+        <button class="btn" type="button" id="copy-email" data-email="jagadishbutukuri33@gmail.com" aria-label="Copy my email address">Email <svg class="cp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></button>
         <a class="btn ghost" href="https://www.linkedin.com/in/jagadish33/" target="_blank" rel="noopener">LinkedIn</a>
         <a class="btn ghost" href="https://github.com/Myselfgitcone" target="_blank" rel="noopener">GitHub</a>
         <a class="btn ghost" href="Jagadish_Butukuri_Resume.pdf" download>Download résumé</a>
       </div>
+      <p class="copied" id="copied" hidden><span class="addr">jagadishbutukuri33@gmail.com</span> copied</p>
     </section>
 
     <footer>
-      <span>Jagadish Butukuri · St. Louis, MO</span>
-      <span>Built by hand, no framework · <a href="https://github.com/Myselfgitcone/portfolio" target="_blank" rel="noopener">source</a> · live numbers come from each project's own published data</span>
+      <span>Jagadish Butukuri · 2026</span>
+      <span><a href="https://github.com/Myselfgitcone/portfolio" target="_blank" rel="noopener">Source</a> · live numbers come from each project's own published data</span>
     </footer>
   </div>
   <script src="app.js"></script>

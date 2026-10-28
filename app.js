@@ -196,6 +196,27 @@ nav.querySelectorAll("ul a").forEach((a) => a.addEventListener("click", () => {
 }));
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") { nav.classList.remove("open"); menu.setAttribute("aria-expanded", "false"); } });
 
+// The Email button copies the address: the icon turns into a tick and the
+// address appears under the buttons so it can also be read or selected.
+const copyBtn = $("copy-email");
+if (copyBtn) copyBtn.addEventListener("click", async () => {
+  const email = copyBtn.dataset.email;
+  let ok = false;
+  try { await navigator.clipboard.writeText(email); ok = true; } catch {}
+  if (!ok) {
+    const t = document.createElement("textarea");
+    t.value = email; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
+    document.body.appendChild(t); t.select();
+    try { ok = document.execCommand("copy"); } catch {}
+    t.remove();
+  }
+  const line = $("copied");
+  line.hidden = false;
+  line.lastChild.textContent = ok ? " copied" : " (select and copy)";
+  copyBtn.classList.add("done");
+  setTimeout(() => copyBtn.classList.remove("done"), 2500);
+});
+
 // ---------- motion ----------
 
 // Numbers in a result tile count up from zero the first time the tile is seen.
