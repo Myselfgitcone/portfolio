@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>og</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Fragment+Mono&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; background: #0d1220; }
+  .og { position: relative; width: 1200px; height: 630px; overflow: hidden; background: #0d1220; color: #eef1f8; font-family: "Bricolage Grotesque", sans-serif; }
+  .glow { position: absolute; inset: 0; filter: blur(80px); opacity: .6; }
+  .glow i { position: absolute; border-radius: 50%; }
+  .glow .a { left: -80px; top: -120px; width: 520px; height: 520px; background: #2447f0; }
+  .glow .b { left: 420px; top: 260px; width: 460px; height: 460px; background: #7c3aed; opacity: .8; }
+  .glow .c { right: -120px; top: -160px; width: 520px; height: 520px; background: #ef5a3c; opacity: .75; }
+  .glow .d { right: 120px; bottom: -220px; width: 420px; height: 420px; background: #e39a0c; opacity: .55; }
+  .in { position: absolute; inset: 56px 64px; display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: center; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font: 500 18px/1 "Fragment Mono", monospace; color: #c3cbe0; margin: 0 0 28px; }
+  .eyebrow i { width: 10px; height: 10px; border-radius: 50%; background: #19a35c; box-shadow: 0 0 0 6px rgba(25,163,92,.25); }
+  h1 { margin: 0 0 24px; font-size: 76px; font-weight: 650; line-height: .98; letter-spacing: -.03em; font-variation-settings: "opsz" 96, "wdth" 86; }
+  h1 span { background: linear-gradient(90deg, #7f98ff, #c4a5ff 45%, #ff9a85); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .name { font-size: 30px; font-weight: 600; margin: 0 0 6px; }
+  .sub { font-size: 22px; color: #a3acc2; margin: 0; }
+  .board { background: #0a0f1c; border: 1px solid rgba(255,255,255,.1); border-radius: 22px; padding: 26px 28px; font: 500 16px/1.55 "Fragment Mono", monospace; box-shadow: 0 40px 80px -30px rgba(0,0,0,.8); }
+  .board h2 { margin: 0 0 14px; font: 500 13px/1 "Fragment Mono", monospace; color: #8a94ad; }
+  .board div { display: grid; grid-template-columns: 14px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.09); }
+  .board i { width: 9px; height: 9px; border-radius: 50%; background: #19a35c; margin-top: 8px; box-shadow: 0 0 0 4px rgba(25,163,92,.2); }
+  .board b { font-weight: 500; display: block; }
+  .board span { color: #8a94ad; font-size: 14px; }
+  .o b { color: #ff9a85; } .g b { color: #ffd37a; } .f b { color: #9db2ff; } .s b { color: #cdb4ff; }
+  .url { position: absolute; left: 64px; bottom: 44px; font: 500 18px/1 "Fragment Mono", monospace; color: #8a94ad; }
+</style>
+</head>
+<body>
+<div class="og">
+  <div class="glow"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div>
+  <div class="in">
+    <div>
+      <p class="eyebrow"><i></i>Senior Data Engineer · St. Louis</p>
+      <h1>Data platforms that run at scale, and the <span>AI on top of them.</span></h1>
+      <p class="name">Jagadish Butukuri</p>
+      <p class="sub">Four live systems on real public data. Open any of them.</p>
+    </div>
+    <div class="board">
+      <h2>RUNNING RIGHT NOW</h2>
+      <div class="f"><i></i><p style="margin:0"><b>Footnote</b><span>Cited answers from SEC 10-K filings</span></p></div>
+      <div class="o"><i></i><p style="margin:0"><b>Orderline</b><span>CDC into Databricks, late-delivery model</span></p></div>
+      <div class="g"><i></i><p style="margin:0"><b>Grainflow</b><span>Streaming lakehouse: Kafka, Iceberg, dbt</span></p></div>
+      <div class="s"><i></i><p style="margin:0"><b>Silo</b><span>MCP server and AI analyst over the lake</span></p></div>
+    </div>
+  </div>
+  <p class="url">jagadish-butukuri.vercel.app</p>
+</div>
+</body>
+</html>
