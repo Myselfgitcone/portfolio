@@ -3,22 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jagadish Butukuri · Senior Data Engineer</title>
-  <meta name="description" content="Senior data engineer in St. Louis. Data platforms at enterprise scale, and the governed AI on top of them. Four live systems on real public data, with their numbers shown as they are right now.">
+  <title>Jagadish Butukuri · Senior Data Engineer · AI Engineer</title>
+  <meta name="description" content="Senior data engineer and AI engineer in St. Louis. Data platforms at enterprise scale, and the RAG, agent and MCP systems on top of them. Four live systems on real public data, with their numbers shown as they are right now.">
   <link rel="canonical" href="https://jagadish-butukuri.vercel.app/">
   <meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d1220" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jagadish-butukuri.vercel.app/">
   <meta property="og:site_name" content="Jagadish Butukuri">
-  <meta property="og:title" content="Jagadish Butukuri · Senior Data Engineer">
+  <meta property="og:title" content="Jagadish Butukuri · Senior Data Engineer · AI Engineer">
   <meta property="og:description" content="Data platforms at enterprise scale, and the AI on top of them. Four live systems you can open, showing their numbers as they are right now.">
   <meta property="og:image" content="https://jagadish-butukuri.vercel.app/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Jagadish Butukuri: data platforms that run at scale, and the AI on top of them. Four live projects.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Jagadish Butukuri · Senior Data Engineer">
+  <meta name="twitter:title" content="Jagadish Butukuri · Senior Data Engineer · AI Engineer">
   <meta name="twitter:description" content="Data platforms at enterprise scale, and the AI on top of them. Four live systems you can open.">
   <meta name="twitter:image" content="https://jagadish-butukuri.vercel.app/og.jpg">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -37,14 +37,15 @@
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Jagadish Butukuri",
-    "jobTitle": "Senior Data Engineer",
+    "jobTitle": ["Senior Data Engineer", "AI Engineer"],
     "url": "https://jagadish-butukuri.vercel.app/",
+    "image": "https://jagadish-butukuri.vercel.app/img/jagadish-og.jpg",
     "email": "mailto:jagadishbutukuri33@gmail.com",
     "address": { "@type": "PostalAddress", "addressLocality": "St. Louis", "addressRegion": "MO", "addressCountry": "US" },
     "alumniOf": { "@type": "CollegeOrUniversity", "name": "Saint Louis University" },
     "worksFor": { "@type": "Organization", "name": "Cargill" },
     "sameAs": ["https://www.linkedin.com/in/jagadish33/", "https://github.com/Myselfgitcone"],
-    "knowsAbout": ["Data engineering", "Apache Spark", "Databricks", "Apache Kafka", "Apache Iceberg", "dbt", "RAG", "LangGraph", "MCP", "AWS", "Azure"]
+    "knowsAbout": ["Data engineering", "AI engineering", "Apache Spark", "Databricks", "Apache Kafka", "Apache Iceberg", "dbt", "RAG", "LLM agents", "LangGraph", "MCP", "LLM evaluation", "AWS", "Azure"]
   }
   </script>
   <style>
@@ -158,6 +159,8 @@
     .glow .b { left: 36%; top: 30%; width: 380px; height: 380px; background: var(--coral); opacity: .28; }
     .glow .c { right: 18%; top: 0; width: 360px; height: 360px; background: var(--gold); opacity: .32; }
     .glow .d { right: 4%; top: 40%; width: 320px; height: 320px; background: var(--violet); opacity: .3; }
+    .me { width: 108px; height: 108px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, var(--blue), var(--violet) 55%, var(--coral)); margin: 0 0 22px; box-shadow: var(--shadow); }
+    .me img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 3px solid var(--paper); }
     .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--rule); font-size: 14px; color: var(--ink-2); box-shadow: var(--shadow); margin: 0 0 22px; }
     .eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--live); box-shadow: 0 0 0 0 rgba(25,163,92,.5); animation: pulse 2.4s ease-out infinite; }
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(25,163,92,.5); } 70% { box-shadow: 0 0 0 8px rgba(25,163,92,0); } 100% { box-shadow: 0 0 0 0 rgba(25,163,92,0); } }
@@ -212,6 +215,21 @@
     .how div { padding: 18px 22px; border-radius: 14px; background: var(--surface); border: 1px dashed var(--rule); }
     .how b { display: block; margin-bottom: 4px; }
     .how p { margin: 0; color: var(--ink-2); font-size: 15px; }
+
+    /* two tracks */
+    .tracks { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .track { border-radius: var(--r); padding: 22px 24px; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); }
+    .track.blue { --c: var(--blue); --ci: var(--blue-ink); --cs: var(--blue-soft); } .track.violet { --c: var(--violet); --ci: var(--violet-ink); --cs: var(--violet-soft); }
+    .track h3 { margin: 0 0 12px; font-size: 21px; font-weight: 650; display: flex; align-items: center; gap: 10px; }
+    .track .tk { font: 600 11.5px/1 var(--mono); color: var(--ci); background: var(--cs); padding: 6px 9px; border-radius: 999px; }
+    .track ul { margin: 0; padding-left: 18px; }
+    .track li { margin: 0 0 8px; color: var(--ink-2); text-wrap: pretty; }
+    .track li::marker { color: var(--c); }
+    .track a { color: var(--ci); font-weight: 650; text-decoration: none; border-bottom: 1px solid var(--cs); }
+    .track a:hover { border-bottom-color: var(--c); }
+    .how-line { margin: 16px 0 0; color: var(--ink-2); font-size: 15px; text-wrap: pretty; }
+    .how-line b { color: var(--ink); }
+    .tag { font: 600 11.5px/1 var(--mono); color: var(--ci); background: var(--surface); padding: 6px 9px; border-radius: 999px; border: 1px solid var(--chip-border); }
 
     /* projects: one colour each */
     .project { position: relative; border-radius: 28px; padding: clamp(24px, 3.5vw, 44px); margin: 0 0 20px; overflow: hidden; border: 1px solid var(--rule); }
@@ -300,7 +318,7 @@
     @media (max-width: 900px) {
       .hero { grid-template-columns: 1fr; padding-top: 40px; }
       .grid4 { grid-template-columns: 1fr 1fr; }
-      .how, .results { grid-template-columns: 1fr; }
+      .how, .results, .tracks { grid-template-columns: 1fr; }
       .section-head { grid-template-columns: 1fr; }
       .p-head { grid-template-columns: 1fr; }
       .p-body { grid-template-columns: 1fr; }
@@ -361,50 +379,65 @@
     <header class="hero" id="top">
       <div class="glow" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div>
       <div>
-        <p class="eyebrow"><i></i>Open to senior data &amp; AI platform roles, anywhere in the US</p>
+        <div class="me"><img src="img/jagadish.webp" width="640" height="640" alt="Jagadish Butukuri" fetchpriority="high" decoding="async"></div>
+        <p class="eyebrow"><i></i>Open to Senior Data Engineer and AI Engineer roles, anywhere in the US</p>
         <h1>Data platforms that run at scale, and the <span class="grad">AI on top of them.</span></h1>
-        <p class="lede">I'm <b>Jagadish Butukuri</b>, a senior data engineer in St. Louis. Five years at JPMorgan Chase, Molina Healthcare and Cargill, taking pipelines and RAG systems from prototype to production. Four of my own are running right now, on real public data.</p>
+        <p class="lede">I'm <b>Jagadish Butukuri</b>, a senior data engineer in St. Louis with 5+ years at JPMorgan Chase, Molina Healthcare and Cargill, taking data pipelines and LLM systems from prototype to production. Four of my own run right now on real public data: two data platforms, two AI systems.</p>
         <div class="actions">
           <a class="btn primary" href="#work">See the live projects</a>
           <a class="btn" href="https://www.linkedin.com/in/jagadish33/" target="_blank" rel="noopener">LinkedIn</a>
           <a class="btn" href="https://github.com/Myselfgitcone" target="_blank" rel="noopener">GitHub</a>
         </div>
-        <ul class="certs"><li>AWS Certified AI Practitioner</li><li>AWS Certified Cloud Practitioner</li><li>M.S. Information Systems</li></ul>
+        <ul class="certs"><li>Authorized to work in the US</li><li>St. Louis · remote, hybrid or on-site anywhere in the US</li></ul>
       </div>
       <aside class="board" aria-label="Live status of the projects">
         <h2><span>Running right now</span><span id="board-clock"></span></h2>
         <ol>
-          <li id="b-orderline"><span class="dot"></span><div><div class="sys"><a href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Orderline</a><span class="when">checking…</span></div><div class="line">CDC from Postgres into Databricks, scored for late delivery</div><svg class="spark" viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true"></svg></div></li>
-          <li id="b-grainflow"><span class="dot"></span><div><div class="sys"><a href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Grainflow</a><span class="when">checking…</span></div><div class="line">Streaming lakehouse: futures, weather, crop ratings</div><svg class="spark" viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true"></svg></div></li>
           <li id="b-footnote"><span class="dot"></span><div><div class="sys"><a href="https://myselfgitcone.github.io/footnote/" target="_blank" rel="noopener">Footnote</a><span class="when">checking…</span></div><div class="line">Cited answers from SEC 10-K filings</div></div></li>
+          <li id="b-grainflow"><span class="dot"></span><div><div class="sys"><a href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Grainflow</a><span class="when">checking…</span></div><div class="line">Streaming lakehouse: futures, weather, crop ratings</div><svg class="spark" viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true"></svg></div></li>
           <li id="b-silo"><span class="dot"></span><div><div class="sys"><a href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Silo</a><span class="when">checking…</span></div><div class="line">MCP server and AI analyst over the Grainflow lake</div></div></li>
+          <li id="b-orderline"><span class="dot"></span><div><div class="sys"><a href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Orderline</a><span class="when">checking…</span></div><div class="line">CDC from Postgres into Databricks, scored for late delivery</div><svg class="spark" viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true"></svg></div></li>
         </ol>
         <p class="note">Read from the systems themselves when this page opens.</p>
       </aside>
     </header>
 
     <section id="about">
-      <div class="section-head reveal"><h2>What I bring</h2><p>The four things I'm hired for, and how I work.</p></div>
+      <div class="section-head reveal"><h2>What I bring</h2><p>Two tracks, one engineer: the data platform, and the AI that runs on it.</p></div>
       <div class="grid4 reveal stagger">
         <div class="card"><div class="ic blue">⛁</div><h3>Data platforms at scale</h3><p>Batch and real-time pipelines on AWS, Azure, Databricks and Snowflake with Spark, Kafka, Delta Lake, Iceberg and dbt. Pipelines handling hundreds of millions of transactions a day.</p></div>
-        <div class="card"><div class="ic violet">✦</div><h3>GenAI, in production</h3><p>RAG with LangChain, OpenAI and Pinecone; MCP servers that let LLM apps query governed data without bypassing access controls; MLflow, SageMaker and Feast for the model lifecycle.</p></div>
+        <div class="card"><div class="ic violet">✦</div><h3>LLM systems, in production</h3><p>RAG with citations, agents with tool use, MCP servers over governed data, structured outputs, prompt caching, guardrails on generated SQL, and evals that gate every change in CI.</p></div>
         <div class="card"><div class="ic gold">◎</div><h3>Reliable, trusted data</h3><p>Data contracts, CDC, freshness SLAs, automated quality checks and observability, so bad data is caught before anyone uses it.</p></div>
         <div class="card"><div class="ic coral">⛨</div><h3>Regulated, sensitive data</h3><p>HIPAA, PHI de-identification, HL7/FHIR, IAM, RBAC, encryption, Lake Formation, Unity Catalog and Purview, in banking and healthcare.</p></div>
       </div>
-      <div class="how reveal stagger">
-        <div><b>Partner across teams</b><p>Works directly with risk, compliance, regulatory reporting and business teams; leads architecture reviews.</p></div>
-        <div><b>Own it in production</b><p>Incident response, runbooks, SLAs and support; owns Cargill's data and AI platform end to end.</p></div>
-        <div><b>Measure, don't guess</b><p>Tests, evals and cost tracking on everything: CI gates on data quality and on AI answer quality.</p></div>
+      <div class="tracks reveal stagger">
+        <div class="track blue">
+          <h3><span class="tk">Data engineering</span>What you get</h3>
+          <ul>
+            <li>Streaming lakehouse with one set of data contracts from Kafka to gold: <a href="#grainflow">Grainflow</a>.</li>
+            <li>Change data capture with zero lost changes, proven by replay in CI: <a href="#orderline">Orderline</a>.</li>
+            <li>Terabytes a day on Databricks at Cargill; hundreds of millions of banking transactions a day at JPMorgan; HIPAA data at Molina.</li>
+          </ul>
+        </div>
+        <div class="track violet">
+          <h3><span class="tk">AI engineering</span>What you get</h3>
+          <ul>
+            <li>RAG where every claim cites its source and every figure is the filed number, with a judge-model eval suite as a CI gate: <a href="#footnote">Footnote</a>.</li>
+            <li>An MCP server and agent with two locks on generated SQL, a cost budget and graded evals: <a href="#silo">Silo</a>.</li>
+            <li>Production RAG and MCP servers at Cargill; a late-delivery model with champion/challenger promotion in MLflow: <a href="#orderline">Orderline</a>.</li>
+          </ul>
+        </div>
       </div>
+      <p class="how-line reveal"><b>How I work:</b> partner directly with risk, compliance and business teams · own it in production, incidents and runbooks included · measure, don't guess: tests, evals and cost tracking on everything.</p>
     </section>
 
     <section id="work">
-      <div class="section-head reveal"><h2>Projects</h2><p>Four systems built end to end on real public data, each still running on a schedule. For each: situation, task, action, result.</p></div>
+      <div class="section-head reveal"><h2>Projects</h2><p>Four systems built end to end on real public data, each still running on a schedule. Two are AI systems, two are data platforms, and Silo runs on top of Grainflow. For each: situation, task, action, result.</p></div>
 
       <article class="project blue reveal" id="footnote">
         <div class="p-head">
           <div>
-            <h3><a href="https://myselfgitcone.github.io/footnote/" target="_blank" rel="noopener">Footnote</a> <span class="live" id="footnote-live">Live · refreshed every morning</span></h3>
+            <h3><a href="https://myselfgitcone.github.io/footnote/" target="_blank" rel="noopener">Footnote</a> <span class="tag">AI engineering</span> <span class="live" id="footnote-live">Live · refreshed every morning</span></h3>
             <p class="what">Ask about twenty public companies' annual reports and get an answer where every claim cites its passage and every figure is the number filed with the SEC.</p>
           </div>
           <div class="p-links"><a class="btn c" href="https://myselfgitcone.github.io/footnote/" target="_blank" rel="noopener">Ask it a question</a><a class="btn" href="https://github.com/Myselfgitcone/footnote" target="_blank" rel="noopener">GitHub</a></div>
@@ -439,48 +472,10 @@
         </div>
       </article>
 
-      <article class="project coral reveal" id="orderline">
-        <div class="p-head">
-          <div>
-            <h3><a href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Orderline</a> <span class="live" id="orderline-live">Live · synced every six hours</span></h3>
-            <p class="what">A live Postgres shop database captured change by change with Debezium and rebuilt in Databricks, with a model that predicts which orders will arrive late.</p>
-          </div>
-          <div class="p-links"><a class="btn c" href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Open the page</a><a class="btn" href="https://github.com/Myselfgitcone/orderline" target="_blank" rel="noopener">GitHub</a></div>
-        </div>
-        <div class="p-body">
-          <div>
-            <ul class="stack stagger"><li>Postgres</li><li>Debezium</li><li>Databricks</li><li>Lakeflow</li><li>Unity Catalog</li><li>MLflow</li><li>scikit-learn</li><li>GitHub Actions</li></ul>
-            <div class="results stagger">
-              <div><span class="n">AUC 0.90 vs 0.67</span><p>model against carrier late rates alone</p></div>
-              <div><span class="n">0 lost changes</span><p>verified by row-for-row replay in CI</p></div>
-              <div><span class="n">4 of 4 causes found</span><p>planted causes of lateness identified</p></div>
-            </div>
-          </div>
-          <a class="shot" href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener" aria-label="Open Orderline"><img src="img/orderline.webp" width="1200" height="504" alt="Orderline: will this order arrive late? Orders captured, open orders, late share and model AUC" loading="lazy" decoding="async"></a>
-        </div>
-        <div class="star">
-          <div><h4>Situation</h4><p>CDC pipelines lose or duplicate changes when a sync fails, and late-delivery models are often trained on mislabeled data, with in-transit orders counted as on time.</p></div>
-          <div><h4>Task</h4><p>Capture every insert, update and delete from a live order database into Databricks without losing or misordering a change, and build a late-delivery model that can be checked against known ground truth.</p></div>
-          <div class="wide"><h4>Action</h4><ul>
-            <li>Changes stream from a Postgres replication slot through Debezium; the slot only advances after a batch has landed in Databricks, so a failed sync loses nothing.</li>
-            <li>A Lakeflow bronze, silver and gold pipeline applies changes in log order with SCD Type 1 and 2, and joins each order to the customer as they were at checkout.</li>
-            <li>A gradient-boosted model with censoring-aware labels: orders not yet due are unknown, not on time, with a time-based train/test split.</li>
-            <li>Known causes of lateness were planted in the source data, so the model is graded on finding the real causes, not just on a score. MLflow promotes a challenger only when it beats the champion.</li>
-            <li>CI replays every captured event and checks it rebuilds the source tables row for row.</li>
-          </ul></div>
-          <div class="wide result"><h4>Result</h4><ul>
-            <li>Model <span class="k">AUC 0.90</span>, against <span class="k">0.67</span> from carrier late rates alone.</li>
-            <li><span class="k">All four</span> planted causes of lateness identified.</li>
-            <li><span class="k">Zero lost changes</span>: replayed duplicates are removed by log position, proven by row-for-row replay checks in CI.</li>
-            <li>Syncs every <span class="k">six hours</span>, with a live page showing predictions and the model's track record.</li>
-          </ul></div>
-        </div>
-      </article>
-
       <article class="project gold reveal" id="grainflow">
         <div class="p-head">
           <div>
-            <h3><a href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Grainflow</a> <span class="live" id="grainflow-live">Live · rebuilt four times a day</span></h3>
+            <h3><a href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Grainflow</a> <span class="tag">Data engineering</span> <span class="live" id="grainflow-live">Live · rebuilt four times a day</span></h3>
             <p class="what">A streaming lakehouse joining CBOT futures, NOAA weather and USDA crop ratings to answer one market question with evidence.</p>
           </div>
           <div class="p-links"><a class="btn c" href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Open the dashboard</a><a class="btn" href="https://github.com/Myselfgitcone/grainflow" target="_blank" rel="noopener">GitHub</a></div>
@@ -518,7 +513,7 @@
       <article class="project violet reveal" id="silo">
         <div class="p-head">
           <div>
-            <h3><a href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Silo</a> <span class="live" id="silo-live">Live · answers from Grainflow's latest build</span></h3>
+            <h3><a href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Silo</a> <span class="tag">AI engineering · MCP</span> <span class="live" id="silo-live">Live · answers from Grainflow's latest build</span></h3>
             <p class="what">Ask Grainflow's data a question in plain English and get the numbers with the SQL behind them, through an MCP server any AI client can use.</p>
           </div>
           <div class="p-links"><a class="btn c" href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Ask it a question</a><a class="btn" href="https://github.com/Myselfgitcone/silo" target="_blank" rel="noopener">GitHub</a></div>
@@ -550,6 +545,44 @@
           </ul></div>
         </div>
       </article>
+
+      <article class="project coral reveal" id="orderline">
+        <div class="p-head">
+          <div>
+            <h3><a href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Orderline</a> <span class="tag">Data engineering · ML</span> <span class="live" id="orderline-live">Live · synced every six hours</span></h3>
+            <p class="what">A live Postgres shop database captured change by change with Debezium and rebuilt in Databricks, with a model that predicts which orders will arrive late.</p>
+          </div>
+          <div class="p-links"><a class="btn c" href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Open the page</a><a class="btn" href="https://github.com/Myselfgitcone/orderline" target="_blank" rel="noopener">GitHub</a></div>
+        </div>
+        <div class="p-body">
+          <div>
+            <ul class="stack stagger"><li>Postgres</li><li>Debezium</li><li>Databricks</li><li>Lakeflow</li><li>Unity Catalog</li><li>MLflow</li><li>scikit-learn</li><li>GitHub Actions</li></ul>
+            <div class="results stagger">
+              <div><span class="n">AUC 0.90 vs 0.67</span><p>model against carrier late rates alone</p></div>
+              <div><span class="n">0 lost changes</span><p>verified by row-for-row replay in CI</p></div>
+              <div><span class="n">4 of 4 causes found</span><p>planted causes of lateness identified</p></div>
+            </div>
+          </div>
+          <a class="shot" href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener" aria-label="Open Orderline"><img src="img/orderline.webp" width="1200" height="504" alt="Orderline: will this order arrive late? Orders captured, open orders, late share and model AUC" loading="lazy" decoding="async"></a>
+        </div>
+        <div class="star">
+          <div><h4>Situation</h4><p>CDC pipelines lose or duplicate changes when a sync fails, and late-delivery models are often trained on mislabeled data, with in-transit orders counted as on time.</p></div>
+          <div><h4>Task</h4><p>Capture every insert, update and delete from a live order database into Databricks without losing or misordering a change, and build a late-delivery model that can be checked against known ground truth.</p></div>
+          <div class="wide"><h4>Action</h4><ul>
+            <li>Changes stream from a Postgres replication slot through Debezium; the slot only advances after a batch has landed in Databricks, so a failed sync loses nothing.</li>
+            <li>A Lakeflow bronze, silver and gold pipeline applies changes in log order with SCD Type 1 and 2, and joins each order to the customer as they were at checkout.</li>
+            <li>A gradient-boosted model with censoring-aware labels: orders not yet due are unknown, not on time, with a time-based train/test split.</li>
+            <li>Known causes of lateness were planted in the source data, so the model is graded on finding the real causes, not just on a score. MLflow promotes a challenger only when it beats the champion.</li>
+            <li>CI replays every captured event and checks it rebuilds the source tables row for row.</li>
+          </ul></div>
+          <div class="wide result"><h4>Result</h4><ul>
+            <li>Model <span class="k">AUC 0.90</span>, against <span class="k">0.67</span> from carrier late rates alone.</li>
+            <li><span class="k">All four</span> planted causes of lateness identified.</li>
+            <li><span class="k">Zero lost changes</span>: replayed duplicates are removed by log position, proven by row-for-row replay checks in CI.</li>
+            <li>Syncs every <span class="k">six hours</span>, with a live page showing predictions and the model's track record.</li>
+          </ul></div>
+        </div>
+      </article>
     </section>
 
     <section id="experience">
@@ -557,7 +590,7 @@
       <div class="timeline reveal stagger">
         <div class="job">
           <span class="when">Sep 2024 – now</span>
-          <h3>Senior Data Engineer <span>· Cargill, Minneapolis</span></h3>
+          <h3>Senior Data Engineer <span>· Cargill, Minneapolis · remote from St. Louis</span></h3>
           <p class="scope">Owns Cargill's cloud-native data and AI platform on AWS and Databricks for supply-chain, procurement, commodity and logistics data.</p>
           <ul>
             <li>Built an ELT platform ingesting <b>terabytes of data daily</b>, and replaced scheduled batch jobs with near-real-time delivery using Spark Structured Streaming and Kafka.</li>
@@ -598,8 +631,9 @@
       <div class="skills reveal stagger">
         <div class="blue"><h3>Data platforms</h3><ul class="chips"><li>Databricks</li><li>Apache Spark</li><li>Structured Streaming</li><li>Delta Lake</li><li>Apache Iceberg</li><li>Snowflake</li><li>Python</li><li>SQL</li><li>PySpark</li></ul></div>
         <div class="coral"><h3>Streaming and CDC</h3><ul class="chips"><li>Kafka</li><li>Kafka Connect</li><li>Confluent Schema Registry</li><li>Debezium</li></ul></div>
-        <div class="violet"><h3>GenAI and ML</h3><ul class="chips"><li>RAG</li><li>LangChain</li><li>LangGraph</li><li>LangSmith</li><li>Pinecone</li><li>MCP</li><li>LLM evals</li><li>MLflow</li><li>SageMaker</li></ul></div>
+        <div class="violet"><h3>LLM engineering</h3><ul class="chips"><li>RAG with citations</li><li>Agents and tool use</li><li>MCP servers</li><li>Anthropic API</li><li>OpenAI API</li><li>LangChain</li><li>LangGraph</li><li>LangSmith evals</li><li>LLM-as-judge</li><li>Structured outputs</li><li>Prompt caching</li><li>Guardrails</li><li>Pinecone</li><li>Embeddings (bge, ONNX)</li></ul></div>
         <div class="gold"><h3>Modeling and data quality</h3><ul class="chips"><li>dbt (incl. Mesh)</li><li>Dimensional modeling</li><li>Data Vault 2.0</li><li>Data contracts</li><li>Great Expectations</li><li>Monte Carlo</li></ul></div>
+        <div class="violet"><h3>ML and MLOps</h3><ul class="chips"><li>scikit-learn</li><li>MLflow</li><li>Champion/challenger</li><li>SageMaker</li><li>Feast</li><li>Time-based validation</li></ul></div>
         <div><h3>Cloud and infrastructure</h3><ul class="chips"><li>AWS S3</li><li>Lambda</li><li>Glue</li><li>Redshift</li><li>Step Functions</li><li>IAM</li><li>Azure Data Factory</li><li>Synapse</li><li>Event Hubs</li><li>Terraform</li><li>Airflow</li><li>Dagster</li></ul></div>
         <div><h3>Regulated data</h3><ul class="chips"><li>HIPAA</li><li>HL7/FHIR</li><li>PHI de-identification</li><li>RBAC</li></ul></div>
       </div>
@@ -607,8 +641,8 @@
     </section>
 
     <section class="contact reveal" id="contact">
-      <h2>Building a data or AI platform that has to work at scale? Let's talk.</h2>
-      <p>Email is quickest. I'm in St. Louis and open to remote, hybrid or on-site work across the US.</p>
+      <h2>Need a data platform that holds up, or an AI system you can trust? Let's talk.</h2>
+      <p>Email is quickest; I reply within a day. Based in St. Louis, open to remote, hybrid or on-site anywhere in the US. Authorized to work in the US.</p>
       <div class="actions">
         <a class="btn" href="mailto:jagadishbutukuri33@gmail.com">Email me</a>
         <a class="btn ghost" href="https://www.linkedin.com/in/jagadish33/" target="_blank" rel="noopener">LinkedIn</a>

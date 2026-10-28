@@ -13,10 +13,12 @@
   .glow .b { left: 420px; top: 260px; width: 460px; height: 460px; background: #7c3aed; opacity: .8; }
   .glow .c { right: -120px; top: -160px; width: 520px; height: 520px; background: #ef5a3c; opacity: .75; }
   .glow .d { right: 120px; bottom: -220px; width: 420px; height: 420px; background: #e39a0c; opacity: .55; }
-  .in { position: absolute; inset: 56px 64px; display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: center; }
-  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font: 500 18px/1 "Fragment Mono", monospace; color: #c3cbe0; margin: 0 0 28px; }
+  .in { position: absolute; inset: 36px 64px 76px; display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: center; }
+  .me { width: 112px; height: 112px; border-radius: 50%; padding: 4px; background: linear-gradient(135deg, #2447f0, #7c3aed 55%, #ef5a3c); margin: 0 0 26px; }
+  .me img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 4px solid #0d1220; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font: 500 18px/1 "Fragment Mono", monospace; color: #c3cbe0; margin: 0 0 22px; }
   .eyebrow i { width: 10px; height: 10px; border-radius: 50%; background: #19a35c; box-shadow: 0 0 0 6px rgba(25,163,92,.25); }
-  h1 { margin: 0 0 24px; font-size: 76px; font-weight: 650; line-height: .98; letter-spacing: -.03em; font-variation-settings: "opsz" 96, "wdth" 86; }
+  h1 { margin: 0 0 20px; font-size: 66px; font-weight: 650; line-height: .98; letter-spacing: -.03em; font-variation-settings: "opsz" 96, "wdth" 86; }
   h1 span { background: linear-gradient(90deg, #7f98ff, #c4a5ff 45%, #ff9a85); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .name { font-size: 30px; font-weight: 600; margin: 0 0 6px; }
   .sub { font-size: 22px; color: #a3acc2; margin: 0; }
@@ -27,7 +29,7 @@
   .board b { font-weight: 500; display: block; }
   .board span { color: #8a94ad; font-size: 14px; }
   .o b { color: #ff9a85; } .g b { color: #ffd37a; } .f b { color: #9db2ff; } .s b { color: #cdb4ff; }
-  .url { position: absolute; left: 64px; bottom: 44px; font: 500 18px/1 "Fragment Mono", monospace; color: #8a94ad; }
+  .url { position: absolute; left: 64px; bottom: 30px; font: 500 18px/1 "Fragment Mono", monospace; color: #8a94ad; }
 </style>
 </head>
 <body>
@@ -35,7 +37,8 @@
   <div class="glow"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div>
   <div class="in">
     <div>
-      <p class="eyebrow"><i></i>Senior Data Engineer · St. Louis</p>
+      <div class="me"><img src="img/jagadish-og.jpg" alt=""></div>
+      <p class="eyebrow"><i></i>Senior Data Engineer · AI Engineer · St. Louis</p>
       <h1>Data platforms that run at scale, and the <span>AI on top of them.</span></h1>
       <p class="name">Jagadish Butukuri</p>
       <p class="sub">Four live systems on real public data. Open any of them.</p>
