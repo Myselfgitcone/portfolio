@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>An Iceberg fanout writer OOM on a 10-year backfill, and the one-line fix · Jagadish Butukuri</title>
+  <meta name="description" content="9,049 rows blew a 1 GB Spark heap. The cause was Iceberg's fanout writer holding one open Parquet file per day partition across 2,500 days. One sortWithinPartitions and one option fixed it.">
+  <link rel="canonical" href="https://jagadish-butukuri.vercel.app/writing/iceberg-fanout-writer-oom">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jagadish-butukuri.vercel.app/writing/iceberg-fanout-writer-oom">
+  <meta property="og:site_name" content="Jagadish Butukuri">
+  <meta property="og:title" content="An Iceberg fanout writer OOM on a 10-year backfill, and the one-line fix">
+  <meta property="og:description" content="9,049 rows blew a 1 GB Spark heap. Iceberg's fanout writer held one open Parquet file per day partition across 2,500 days. One sortWithinPartitions and one option fixed it.">
+  <meta property="og:image" content="https://jagadish-butukuri.vercel.app/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1220" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Fragment+Mono&display=swap" rel="stylesheet">
+  <script>try { var t = localStorage.getItem("theme"); if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "An Iceberg fanout writer OOM on a 10-year backfill, and the one-line fix",
+    "datePublished": "2026-10-28",
+    "dateModified": "2026-10-28",
+    "author": { "@type": "Person", "name": "Jagadish Butukuri", "url": "https://jagadish-butukuri.vercel.app/" },
+    "url": "https://jagadish-butukuri.vercel.app/writing/iceberg-fanout-writer-oom",
+    "image": "https://jagadish-butukuri.vercel.app/og.jpg",
+    "keywords": ["Apache Iceberg", "Apache Spark", "Structured Streaming", "fanout writer", "OutOfMemoryError", "backfill"]
+  }
+  </script>
+  <style>
+    :root {
+      --paper: #fcfcfd; --ink: #121a2e; --ink-2: #4f5a70; --rule: #e4e7ee; --surface: #ffffff;
+      --blue: #2447f0; --blue-soft: #edf0ff; --blue-ink: #1b35b8; --gold: #e39a0c; --gold-soft: #fff6df; --gold-ink: #9a6400;
+      --code-bg: #0f1629; --code-ink: #eef1f8; --code-dim: #8a94ad; --add: #19a35c; --del: #ef5a3c;
+      --sans: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif; --mono: "Fragment Mono", ui-monospace, Menlo, monospace;
+      --shadow: 0 1px 2px rgba(18,26,46,.06), 0 12px 32px -12px rgba(18,26,46,.18); --nav-bg: rgba(255,255,255,.78);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+      --paper: #0d1220; --ink: #eef1f8; --ink-2: #a3acc2; --rule: #232b40; --surface: #151c2e;
+      --blue: #5b78ff; --blue-soft: rgba(91,120,255,.13); --blue-ink: #aebcff; --gold: #f4b63b; --gold-soft: rgba(244,182,59,.13); --gold-ink: #ffd98a;
+      --code-bg: #0a0f1c; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.6); --nav-bg: rgba(13,18,32,.78);
+      color-scheme: dark;
+    } }
+    :root[data-theme="dark"] {
+      --paper: #0d1220; --ink: #eef1f8; --ink-2: #a3acc2; --rule: #232b40; --surface: #151c2e;
+      --blue: #5b78ff; --blue-soft: rgba(91,120,255,.13); --blue-ink: #aebcff; --gold: #f4b63b; --gold-soft: rgba(244,182,59,.13); --gold-ink: #ffd98a;
+      --code-bg: #0a0f1c; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.6); --nav-bg: rgba(13,18,32,.78);
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17.5px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+    a { color: var(--blue-ink); text-decoration: none; border-bottom: 1px solid var(--blue-soft); }
+    a:hover { border-bottom-color: var(--blue); }
+    :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
+    .navwrap { position: sticky; top: 12px; z-index: 10; padding: 0 clamp(20px, 4vw, 48px); }
+    nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px auto 0; max-width: 1240px; padding: 8px 10px 8px 20px; background: var(--nav-bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--rule); border-radius: 999px; box-shadow: var(--shadow); }
+    nav .name { font-weight: 700; color: var(--ink); border: 0; display: inline-flex; align-items: center; gap: 10px; }
+    nav .name svg { width: 26px; height: 26px; border-radius: 8px; }
+    nav .back { font-size: 15px; color: var(--ink-2); border: 0; padding: 8px 14px; border-radius: 999px; }
+    nav .back:hover { color: var(--ink); background: var(--blue-soft); }
+    main { max-width: 720px; margin: 0 auto; padding: 56px clamp(20px, 4vw, 48px) 80px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px 14px; font: 500 13px/1 var(--mono); color: var(--ink-2); margin: 0 0 20px; }
+    .meta .tag { color: var(--gold-ink); background: var(--gold-soft); padding: 6px 9px; border-radius: 999px; }
+    h1 { margin: 0 0 16px; font-size: clamp(32px, 4.4vw, 48px); font-weight: 650; line-height: 1.05; letter-spacing: -0.02em; font-variation-settings: "opsz" 96, "wdth" 88; text-wrap: balance; }
+    .dek { margin: 0 0 36px; font-size: 20px; color: var(--ink-2); line-height: 1.45; text-wrap: pretty; }
+    h2 { margin: 44px 0 12px; font-size: 25px; font-weight: 650; letter-spacing: -0.015em; line-height: 1.15; }
+    p, li { text-wrap: pretty; }
+    p { margin: 0 0 18px; }
+    ul, ol { margin: 0 0 18px; padding-left: 22px; }
+    li { margin: 0 0 8px; }
+    li::marker { color: var(--gold); }
+    code { font: 500 .88em/1.5 var(--mono); background: var(--blue-soft); color: var(--blue-ink); padding: 2px 6px; border-radius: 6px; }
+    pre { margin: 0 0 22px; padding: 18px 20px; border-radius: 14px; background: var(--code-bg); color: var(--code-ink); overflow-x: auto; font: 400 13.5px/1.55 var(--mono); box-shadow: var(--shadow); }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    pre .c { color: var(--code-dim); } pre .add { color: #7ee2a8; } pre .del { color: #ff9a85; }
+    .callout { margin: 0 0 22px; padding: 16px 20px; border-radius: 14px; background: var(--gold-soft); border-left: 4px solid var(--gold); }
+    .callout p { margin: 0; }
+    .callout b { color: var(--gold-ink); }
+    table { border-collapse: collapse; width: 100%; margin: 0 0 22px; font-size: 16px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    th { font: 600 12.5px/1 var(--mono); color: var(--ink-2); }
+    td:first-child { white-space: nowrap; }
+    .foot { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 15.5px; display: flex; gap: 16px; align-items: center; }
+    .foot img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; flex: none; }
+    .foot p { margin: 0; }
+    @media print { .navwrap { display: none; } body { font-size: 12.5px; } pre { white-space: pre-wrap; } }
+  </style>
+</head>
+<body>
+  <div class="navwrap">
+    <nav aria-label="Site">
+      <a class="name" href="../"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2447f0"/><stop offset=".5" stop-color="#7c3aed"/><stop offset="1" stop-color="#ef5a3c"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#g)"/><path d="M22 16h8v24a9 9 0 0 1-9 9c-4.5 0-8-2.4-9.5-6.5l6.8-3.2c.6 1.6 1.5 2.4 2.7 2.4 1.3 0 2-.9 2-2.7V16Zm14 0h10.5c6.5 0 10.5 3 10.5 8.4 0 3-1.5 5.2-4 6.3 3.4 1 5.5 3.7 5.5 7.4 0 6.2-4.4 9.9-11.7 9.9H36V16Zm7.6 13.1h2.7c2.4 0 3.7-1.1 3.7-3.1s-1.3-3.1-3.7-3.1h-2.7v6.2Zm0 12.2h3.4c2.8 0 4.3-1.2 4.3-3.5s-1.5-3.4-4.3-3.4h-3.4v6.9Z" fill="#fff"/></svg>Jagadish Butukuri</a>
+      <a class="back" href="../#grainflow">← Back to Grainflow</a>
+    </nav>
+  </div>
+
+  <main>
+    <article>
+      <p class="meta"><span class="tag">Grainflow</span><span>October 28, 2026</span><span>6 min read</span><span>Spark 3.5.5 · Iceberg 1.8.1</span></p>
+      <h1>An Iceberg fanout writer OOM on a 10-year backfill, and the one-line fix</h1>
+      <p class="dek">9,049 rows blew a 1 GB Spark heap and put the stream in a crash loop. The rows were not the problem. The 2,500 open Parquet files behind them were.</p>
+
+      <h2>The setup</h2>
+      <p><a href="https://github.com/Myselfgitcone/grainflow" target="_blank" rel="noopener">Grainflow</a> streams CBOT grain futures, NWS weather and USDA crop ratings from Kafka into Apache Iceberg bronze tables with Spark Structured Streaming. One job, one <code>foreachBatch</code> per contract. Every table is partitioned by day: for price bars, <code>partition: { field: bar_start, transform: day }</code> in the contract YAML, which generates the Iceberg DDL.</p>
+      <p>The whole stack runs on a laptop under docker compose. Spark is <code>local[2]</code> with the default 1 GB driver. In local mode the executors live inside the driver JVM, so "driver memory" is all the memory the job has.</p>
+      <p>Live, this is easy. A 30-second micro-batch holds a few minutes of 1-minute bars, all from today. One partition, one file, done.</p>
+
+      <h2>The failure</h2>
+      <p>To test the weekly signal over nine growing seasons I backfilled ten years of daily bars through the same Kafka topic the live producer uses: 9,049 rows, one per contract per trading day, about 2,500 distinct days. The stream's <code>maxOffsetsPerTrigger</code> is 50,000, so the entire backfill arrived in a single micro-batch.</p>
+      <p>The job died with <code>java.lang.OutOfMemoryError: Java heap space</code>. The container restarted, Structured Streaming replayed the same micro-batch from the checkpoint, and it died again. A clean crash loop, every 40 seconds.</p>
+      <p>9,049 rows is nothing. A few hundred kilobytes. Nothing about the data explained a gigabyte of heap.</p>
+
+      <h2>What was actually in memory</h2>
+      <p>Iceberg's Spark writer has two strategies for partitioned tables.</p>
+      <ul>
+        <li><b>Clustered writer.</b> Expects each task's rows to arrive grouped by partition. It keeps one open file; when the partition value changes it closes that file and opens the next. If a partition it already closed shows up again, it fails fast.</li>
+        <li><b>Fanout writer.</b> Makes no assumption about order. It keeps one open file writer per distinct partition the task has seen, and closes them all when the task finishes.</li>
+      </ul>
+      <p>For streaming writes Iceberg turns the fanout writer on by default, and that is the right default: micro-batches are rarely sorted, and a clustered writer meeting unsorted data would throw on every batch. For a live stream touching one or two partitions per batch, fanout costs nothing.</p>
+      <p>It costs a lot when one micro-batch spans 2,500 days. Two tasks, each seeing most of those days, is on the order of 5,000 open Parquet writers at once. Each one owns column buffers, a dictionary encoder per column, page buffers and the file footer it has not written yet. None of them flush until the task ends. With everything inside one 1 GB JVM, the heap filled before the first file closed.</p>
+      <div class="callout"><p><b>The lesson in one line:</b> the fanout writer's memory is proportional to <i>distinct partitions per task</i>, not to rows. A backfill changes that number by three orders of magnitude without changing the row count much at all.</p></div>
+
+      <h2>The fix</h2>
+      <p>The clustered writer only needs rows ordered by partition <i>within each task</i>. That is <code>sortWithinPartitions</code>, a local sort with no shuffle. Then tell Iceberg it can trust the order.</p>
+<pre><code><span class="c"># spark/jobs/stream_to_bronze.py</span>
+<span class="add">+ CLUSTERED_WRITE = {"distribution-mode": "none", "fanout-enabled": "false"}</span>
+<span class="add">+</span>
+<span class="add">+ def clustered_by_partition(rows: DataFrame, contract: Contract) -> DataFrame:</span>
+<span class="add">+     return rows.sortWithinPartitions(contract.partition_field)</span>
+
+  def batch_writer(contract: Contract):
+      ...
+<span class="del">-             good.writeTo(table).append()</span>
+<span class="add">+             clustered_by_partition(good, contract).writeTo(table).options(</span>
+<span class="add">+                 **CLUSTERED_WRITE</span>
+<span class="add">+             ).append()</span></code></pre>
+      <p>Three choices in there, each deliberate.</p>
+      <ul>
+        <li><code>sortWithinPartitions</code>, not <code>orderBy</code>. A global sort would shuffle the batch across tasks. The clustered writer does not need that; it needs order inside a task.</li>
+        <li><code>fanout-enabled: false</code>. Overrides the streaming default so Iceberg uses the clustered writer. With the sort in place it never sees a closed partition again, so the fail-fast path never fires.</li>
+        <li><code>distribution-mode: none</code>. <code>hash</code> would shuffle rows so each partition is written by one task, giving fewer files. On two local cores that shuffle is pure overhead, and Dagster already runs nightly compaction on the bronze tables. In a cluster with many executors I would flip this to <code>hash</code>.</li>
+      </ul>
+      <p>The partition field comes from the same contract YAML that generates the table, so the sort column can never drift from the partition spec.</p>
+      <p>I also raised the driver to 1.5 GB in <code>spark-defaults.conf</code>. That is headroom, not the fix. Before the sort, 1.5 GB died the same way.</p>
+
+      <h2>Proving it</h2>
+      <p>A unit test feeds the writer bars from five days in scrambled order, collapses them to one task, and asserts the rows come out sorted and the fanout option is off. It runs in CI on every change, on a local Spark with no cluster.</p>
+<pre><code>def test_rows_are_clustered_by_partition_before_writing(spark, contracts, price_bar):
+    contract = contracts["price_bar"]
+    days = ["2019-03-04", "2017-01-03", "2024-06-10", "2017-01-03", "2019-03-04"]
+    bars = [{**price_bar, "bar_interval": "1d", "bar_start": f"{d}T05:00:00+00:00"} for d in days]
+    good, _ = job.split(job.decode(kafka_rows(spark, bars), contract), contract)
+
+    ordered = job.clustered_by_partition(good.coalesce(1), contract)
+
+    starts = [r.bar_start for r in ordered.collect()]
+    assert starts == sorted(starts)
+    assert job.CLUSTERED_WRITE["fanout-enabled"] == "false"</code></pre>
+      <p>Then the real run. The same 10-year backfill landed in one micro-batch in about 38 seconds, memory stayed flat, and batch time fell back to about 2 seconds once the stream caught up. Those 9,049 bars are what the nine-season result on the Grainflow page is computed from.</p>
+
+      <h2>What I would do differently in production</h2>
+      <table>
+        <tr><th>Situation</th><th>Choice</th></tr>
+        <tr><td>Backfill through the stream</td><td>Cap <code>maxOffsetsPerTrigger</code> so one micro-batch cannot span years, or run backfills as a batch job and leave the stream for live data.</td></tr>
+        <tr><td>Many executors</td><td><code>distribution-mode: hash</code> so each partition is written by one task and the small-file count drops at write time instead of at compaction.</td></tr>
+        <tr><td>Unsorted data, must use clustered</td><td>Do not. The clustered writer fails fast on a reopened partition, which is a better failure than a slow OOM, but the sort is cheap enough to just always do.</td></tr>
+        <tr><td>Any streaming Iceberg write</td><td>Know which writer you are on. Fanout is the default and it is correct, right up until the partition count per batch grows.</td></tr>
+      </table>
+
+      <p>The commit is <a href="https://github.com/Myselfgitcone/grainflow/commit/a40db3c55ece49857df3c287488a51f0e3201735" target="_blank" rel="noopener">a40db3c</a>: 28 lines, one of which is the fix.</p>
+    </article>
+
+    <div class="foot">
+      <img src="../img/jagadish.webp" alt="">
+      <p>I'm <b>Jagadish Butukuri</b>, a senior data engineer and AI engineer in St. Louis. Grainflow is one of <a href="../#work">four live systems</a> on my portfolio. <a href="mailto:jagadishbutukuri33@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/jagadish33/" target="_blank" rel="noopener">LinkedIn</a></p>
+    </div>
+  </main>
+</body>
+</html>

@@ -274,6 +274,7 @@
     .star li::marker { color: var(--c); }
     .star .result { background: var(--surface); border-left: 4px solid var(--c); }
     .k { font-weight: 700; color: var(--ci); }
+    .star a.more { color: var(--ci); font-weight: 650; text-decoration: none; border-bottom: 1px solid var(--c); white-space: nowrap; }
 
     /* experience */
     .timeline { position: relative; padding-left: 28px; }
@@ -478,7 +479,7 @@
             <h3><a href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Grainflow</a> <span class="tag">Data engineering</span> <span class="live" id="grainflow-live">Live · rebuilt four times a day</span></h3>
             <p class="what">A streaming lakehouse joining CBOT futures, NOAA weather and USDA crop ratings to answer one market question with evidence.</p>
           </div>
-          <div class="p-links"><a class="btn c" href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Open the dashboard</a><a class="btn" href="https://github.com/Myselfgitcone/grainflow" target="_blank" rel="noopener">GitHub</a></div>
+          <div class="p-links"><a class="btn c" href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Open the dashboard</a><a class="btn" href="https://github.com/Myselfgitcone/grainflow" target="_blank" rel="noopener">GitHub</a><a class="btn" href="writing/iceberg-fanout-writer-oom">Write-up</a></div>
         </div>
         <div class="p-body">
           <div>
@@ -497,7 +498,7 @@
           <div class="wide"><h4>Action</h4><ul>
             <li>One YAML contract per dataset drives validation, schemas, tests and freshness alerts; invalid records go to a dead-letter queue or quarantine table, never the lake.</li>
             <li>Kafka and Spark Structured Streaming land data in Apache Iceberg; dbt on Trino models silver and gold, orchestrated by Dagster with freshness checks and nightly compaction.</li>
-            <li>Fixed a Spark out-of-memory failure on a ten-year backfill by switching Iceberg to clustered writes.</li>
+            <li>Fixed a Spark out-of-memory failure on a ten-year backfill by switching Iceberg from its fanout writer to clustered writes. <a class="more" href="writing/iceberg-fanout-writer-oom">Read the write-up ↗</a></li>
             <li>Caught a modeling bug: averaging 41 states diluted the signal, so the mart now uses USDA's official 18 states.</li>
             <li>The same dbt models run on DuckDB to publish a free public dashboard four times a day.</li>
           </ul></div>
