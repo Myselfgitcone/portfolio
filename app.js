@@ -32,10 +32,14 @@ function set(el, text) {
   el.textContent = text;
 }
 
-function show(id, when, line, extra) {
+// A system whose last update is older than this is shown amber, not green.
+const STALE_HOURS = 36;
+
+function show(id, when, line, extra, asOf) {
   const li = $("b-" + id);
-  li.classList.add("on");
-  li.classList.remove("off");
+  li.classList.remove("off", "stale");
+  const stale = asOf && Date.now() - new Date(asOf) > STALE_HOURS * 3600 * 1000;
+  li.classList.add(stale ? "stale" : "on");
   set(li.querySelector(".when"), when);
   if (line) set(li.querySelector(".line"), line);
   if (extra) set($(id + "-live"), extra);
@@ -83,7 +87,8 @@ async function orderline() {
       `synced ${ago(synced)}`,
       `${n(s.orders)} orders · ${n(s.open_orders)} open · ${Math.round(s.late_share_30d * 100)}% late in the last 30 days` +
         (last ? ` · last sync landed ${n(last.events)} changes` : ""),
-      `Live · ${n(s.orders)} orders captured · synced ${ago(synced)}`
+      `Live · ${n(s.orders)} orders captured · synced ${ago(synced)}`,
+      synced
     );
     // orders per day, last 30 complete days
     const daily = (d.daily || []).slice(-31, -1).map((x) => x.orders);
@@ -103,7 +108,8 @@ async function grainflow() {
       "grainflow",
       `rebuilt ${ago(d.generated_at)}`,
       `${d.tables.length} gold tables · ${n(rows)} rows · futures, weather and crop ratings`,
-      `Live · ${n(rows)} rows across ${d.tables.length} tables · rebuilt ${ago(d.generated_at)}`
+      `Live · ${n(rows)} rows across ${d.tables.length} tables · rebuilt ${ago(d.generated_at)}`,
+      d.generated_at
     );
   } catch {
     down("grainflow");
@@ -140,7 +146,8 @@ async function footnote() {
       "footnote",
       `indexed ${ago(d.generated_at)}`,
       `${d.filings} annual reports · ${d.companies} companies · ${n(d.passages)} passages · newest: ${latest.name} FY${latest.fiscal_year}`,
-      `Live · ${d.filings} annual reports · ${n(d.passages)} passages · updated ${ago(d.generated_at)}`
+      `Live · ${d.filings} annual reports · ${n(d.passages)} passages · updated ${ago(d.generated_at)}`,
+      d.generated_at
     );
     set($("footnote-n"), `${d.filings} reports · ${Math.round(d.passages / 1000)}k passages`);
   } catch {
@@ -159,7 +166,8 @@ async function silo(builtPromise) {
       "silo",
       built ? `serving lake built ${ago(built)}` : "up",
       null,
-      built ? `Live · answering from the lake built ${ago(built)}` : null
+      built ? `Live · answering from the lake built ${ago(built)}` : null,
+      built
     );
   } catch {
     down("silo");
