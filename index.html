@@ -465,8 +465,6 @@
           <div><h4>Situation</h4><p>Financial questions are a common use for LLMs, but models invent numbers and misread tables, and a single 10-K runs hundreds of pages, so answers are hard to trust or check.</p></div>
           <div><h4>Task</h4><p>Build a production-style RAG system over SEC filings where every claim carries a citation, every number is the officially filed figure, and answer quality is measured automatically.</p></div>
           <div class="wide"><h4>Action</h4><ul>
-            <li>A daily serverless pipeline on AWS pulls 10-Ks from SEC EDGAR into S3 and splits them into sections, all provisioned with Terraform.</li>
-            <li>Sections are cut into overlapping passages and embedded on CPU with bge-small, avoiding about <span class="k">10 million tokens</span> of hosted embeddings, then indexed in Pinecone with their source.</li>
             <li>A LangGraph pipeline: Claude plans the question, text search and an exact-figure lookup from XBRL run in parallel, then Claude writes an answer that may cite only what was retrieved.</li>
             <li>A <span class="k">29-question</span> evaluation suite in LangSmith with a stronger model as judge, run as a CI gate that blocks any change that lowers answer quality.</li>
             <li>Found and fixed a real data problem: Exxon's ticker moved to a new holding company in 2026 and its filings silently vanished. Ingest now follows predecessor registrants and flags any company that comes back empty.</li>
@@ -504,10 +502,8 @@
           <div><h4>Task</h4><p>Build a streaming lakehouse where one set of data contracts governs every dataset from producer to gold table, then use it to answer the question with statistical evidence.</p></div>
           <div class="wide"><h4>Action</h4><ul>
             <li>One YAML contract per dataset drives validation, schemas, tests and freshness alerts; invalid records go to a dead-letter queue or quarantine table, never the lake.</li>
-            <li>Kafka and Spark Structured Streaming land data in Apache Iceberg; dbt on Trino models silver and gold, orchestrated by Dagster with freshness checks and nightly compaction.</li>
             <li>Fixed a Spark out-of-memory failure on a ten-year backfill by switching Iceberg from its fanout writer to clustered writes. <a class="more" href="writing/iceberg-fanout-writer-oom">Read the write-up ↗</a></li>
             <li>Caught a modeling bug: averaging 41 states diluted the signal, so the mart now uses USDA's official 18 states.</li>
-            <li>The same dbt models run on DuckDB to publish a free public dashboard four times a day.</li>
           </ul></div>
           <div class="wide result"><h4>Result</h4><ul>
             <li>Corn rose <span class="k">0.93%</span> the week after ratings fell and fell <span class="k">0.79%</span> after they rose, significant over <span class="k">257 weeks</span> (p ≈ 0.01).</li>
@@ -543,7 +539,6 @@
           <div class="wide"><h4>Action</h4><ul>
             <li>An MCP server with six tools and a semantic metrics layer that encodes analyst rules, such as never averaging corn with soybeans.</li>
             <li>Two locks on free-form SQL: a sqlglot parser that allows exactly one read-only SELECT, and a database engine configured so it cannot touch files or the network even if a query slips through.</li>
-            <li>An agent with a daily budget, a step cap and prompt caching, showing every tool call, query, cost and latency to the user.</li>
             <li>Evals whose expected answers are computed by SQL at test time, so they stay correct as the data refreshes, run as a CI gate.</li>
           </ul></div>
           <div class="wide result"><h4>Result</h4><ul>
@@ -578,9 +573,7 @@
           <div><h4>Task</h4><p>Capture every insert, update and delete from a live order database into Databricks without losing or misordering a change, and build a late-delivery model that can be checked against known ground truth.</p></div>
           <div class="wide"><h4>Action</h4><ul>
             <li>Changes stream from a Postgres replication slot through Debezium; the slot only advances after a batch has landed in Databricks, so a failed sync loses nothing.</li>
-            <li>A Lakeflow bronze, silver and gold pipeline applies changes in log order with SCD Type 1 and 2, and joins each order to the customer as they were at checkout.</li>
-            <li>A gradient-boosted model with censoring-aware labels: orders not yet due are unknown, not on time, with a time-based train/test split.</li>
-            <li>Known causes of lateness were planted in the source data, so the model is graded on finding the real causes, not just on a score. MLflow promotes a challenger only when it beats the champion.</li>
+            <li>A gradient-boosted model with censoring-aware labels, graded on finding the causes planted in the source data, not just on a score. MLflow promotes a challenger only when it beats the champion.</li>
             <li>CI replays every captured event and checks it rebuilds the source tables row for row.</li>
           </ul></div>
           <div class="wide result"><h4>Result</h4><ul>
