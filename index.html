@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jagadish Butukuri · Senior Data Engineer · AI Engineer</title>
-  <meta name="description" content="Senior data engineer and AI engineer in St. Louis. Data platforms at enterprise scale, and the RAG, agent and MCP systems on top of them. Four live systems on real public data, with their numbers shown as they are right now.">
+  <meta name="description" content="Senior data engineer and AI engineer in St. Louis. Data platforms at enterprise scale, and the RAG, SQL-agent and MCP systems on top of them. Four live systems on real public data, with their numbers shown as they are right now.">
   <link rel="canonical" href="https://jagadish-butukuri.vercel.app/">
   <meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d1220" media="(prefers-color-scheme: dark)">
@@ -45,7 +45,7 @@
     "alumniOf": { "@type": "CollegeOrUniversity", "name": "Saint Louis University" },
     "worksFor": { "@type": "Organization", "name": "Cargill" },
     "sameAs": ["https://www.linkedin.com/in/jagadish33/", "https://github.com/Myselfgitcone"],
-    "knowsAbout": ["Data engineering", "AI engineering", "Apache Spark", "Databricks", "Apache Kafka", "Apache Iceberg", "dbt", "RAG", "LLM agents", "LangGraph", "MCP", "LLM evaluation", "AWS", "Azure"]
+    "knowsAbout": ["Data engineering", "AI engineering", "Apache Spark", "Databricks", "Apache Kafka", "Apache Iceberg", "dbt", "RAG", "LLM agents", "Text-to-SQL agents", "LangGraph", "MCP", "LLM evaluation", "AWS", "Azure"]
   }
   </script>
   <style>
@@ -403,7 +403,7 @@
         <ol>
           <li id="b-footnote"><span class="dot"></span><div><div class="sys"><a href="https://myselfgitcone.github.io/footnote/" target="_blank" rel="noopener">Footnote</a><span class="when">checking…</span></div><div class="line">Cited answers from SEC 10-K filings</div></div></li>
           <li id="b-grainflow"><span class="dot"></span><div><div class="sys"><a href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Grainflow</a><span class="when">checking…</span></div><div class="line">Streaming lakehouse: futures, weather, crop ratings</div><svg class="spark" viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true"></svg></div></li>
-          <li id="b-silo"><span class="dot"></span><div><div class="sys"><a href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Silo</a><span class="when">checking…</span></div><div class="line">MCP server and AI analyst over the Grainflow lake</div></div></li>
+          <li id="b-silo"><span class="dot"></span><div><div class="sys"><a href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Silo</a><span class="when">checking…</span></div><div class="line">Text-to-SQL agent and MCP server over the Grainflow lake</div></div></li>
           <li id="b-orderline"><span class="dot"></span><div><div class="sys"><a href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Orderline</a><span class="when">checking…</span></div><div class="line">CDC from Postgres into Databricks, scored for late delivery</div><svg class="spark" viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true"></svg></div></li>
         </ol>
         <p class="note">Read from the systems themselves when this page opens.</p>
@@ -414,7 +414,7 @@
       <div class="section-head reveal"><h2>What I bring</h2><p>Two tracks, one engineer: the data platform, and the AI that runs on it.</p></div>
       <div class="grid4 reveal stagger">
         <div class="card"><div class="ic blue">⛁</div><h3>Data platforms at scale</h3><p>Batch and real-time pipelines on AWS, Azure, Databricks and Snowflake with Spark, Kafka, Delta Lake, Iceberg and dbt. Pipelines handling hundreds of millions of transactions a day.</p></div>
-        <div class="card"><div class="ic violet">✦</div><h3>LLM systems, in production</h3><p>RAG with citations, agents with tool use, MCP servers over governed data, structured outputs, prompt caching, guardrails on generated SQL, and evals that gate every change in CI.</p></div>
+        <div class="card"><div class="ic violet">✦</div><h3>LLM systems, in production</h3><p>RAG with citations, text-to-SQL agents with tool use, MCP servers over governed data, structured outputs, prompt caching, guardrails on generated SQL, and evals that gate every change in CI.</p></div>
         <div class="card"><div class="ic gold">◎</div><h3>Reliable, trusted data</h3><p>Data contracts, CDC, freshness SLAs, automated quality checks and observability, so bad data is caught before anyone uses it.</p></div>
         <div class="card"><div class="ic coral">⛨</div><h3>Regulated, sensitive data</h3><p>HIPAA, PHI de-identification, HL7/FHIR, IAM, RBAC, encryption, Lake Formation, Unity Catalog and Purview, in banking and healthcare.</p></div>
       </div>
@@ -431,7 +431,7 @@
           <h3><span class="tk">AI engineering</span>What you get</h3>
           <ul>
             <li>RAG where every claim cites its source and every figure is the filed number, with a judge-model eval suite as a CI gate: <a href="#footnote">Footnote</a>.</li>
-            <li>An MCP server and agent with two locks on generated SQL, a cost budget and graded evals: <a href="#silo">Silo</a>.</li>
+            <li>A text-to-SQL agent over a lakehouse, with two locks on generated SQL, a cost budget and graded evals, served as an MCP server: <a href="#silo">Silo</a>.</li>
             <li>Production RAG and MCP servers at Cargill; a late-delivery model with champion/challenger promotion in MLflow: <a href="#orderline">Orderline</a>.</li>
           </ul>
         </div>
@@ -521,8 +521,8 @@
       <article class="project violet reveal" id="silo">
         <div class="p-head">
           <div>
-            <h3><a href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Silo</a> <span class="tag">AI engineering · MCP</span> <span class="live" id="silo-live">Live · answers from Grainflow's latest build</span></h3>
-            <p class="what">Ask Grainflow's data a question in plain English and get the numbers with the SQL behind them, through an MCP server any AI client can use.</p>
+            <h3><a href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Silo</a> <span class="tag">AI engineering · SQL agent · MCP</span> <span class="live" id="silo-live">Live · answers from Grainflow's latest build</span></h3>
+            <p class="what">A text-to-SQL agent: ask Grainflow's data a question in plain English and get the numbers with the SQL it ran, exposed as an MCP server any AI client can use.</p>
           </div>
           <div class="p-links"><a class="btn c" href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Ask it a question</a><a class="btn" href="https://github.com/Myselfgitcone/silo" target="_blank" rel="noopener">GitHub</a></div>
         </div>
@@ -541,7 +541,7 @@
           <div><h4>Situation</h4><p>Letting an LLM write SQL against real data is risky: it can run unsafe queries, average the wrong columns, or return a confident wrong number.</p></div>
           <div><h4>Task</h4><p>Let any AI agent answer questions about the Grainflow lakehouse safely, accurately and cheaply, and prove it with tests.</p></div>
           <div class="wide"><h4>Action</h4><ul>
-            <li>An MCP server with six tools and a semantic metrics layer that encodes analyst rules, such as never averaging corn with soybeans.</li>
+            <li>A SQL agent built as an MCP server with six tools and a semantic metrics layer that encodes analyst rules, such as never averaging corn with soybeans. The model tries a named metric first and writes SQL only when no metric fits.</li>
             <li>Two locks on free-form SQL: a sqlglot parser that allows exactly one read-only SELECT, and a database engine configured so it cannot touch files or the network even if a query slips through.</li>
             <li>An agent with a daily budget, a step cap and prompt caching, showing every tool call, query, cost and latency to the user.</li>
             <li>Evals whose expected answers are computed by SQL at test time, so they stay correct as the data refreshes, run as a CI gate.</li>
@@ -639,7 +639,7 @@
       <div class="skills reveal stagger">
         <div class="blue"><h3>Data platforms</h3><ul class="chips"><li>Databricks</li><li>Apache Spark</li><li>Structured Streaming</li><li>Delta Lake</li><li>Apache Iceberg</li><li>Snowflake</li><li>Python</li><li>SQL</li><li>PySpark</li></ul></div>
         <div class="coral"><h3>Streaming and CDC</h3><ul class="chips"><li>Kafka</li><li>Kafka Connect</li><li>Confluent Schema Registry</li><li>Debezium</li></ul></div>
-        <div class="violet"><h3>LLM engineering</h3><ul class="chips"><li>RAG with citations</li><li>Agents and tool use</li><li>MCP servers</li><li>Anthropic API</li><li>OpenAI API</li><li>LangChain</li><li>LangGraph</li><li>LangSmith evals</li><li>LLM-as-judge</li><li>Structured outputs</li><li>Prompt caching</li><li>Guardrails</li><li>Pinecone</li><li>Embeddings (bge, ONNX)</li></ul></div>
+        <div class="violet"><h3>LLM engineering</h3><ul class="chips"><li>RAG with citations</li><li>Agents and tool use</li><li>Text-to-SQL agents</li><li>MCP servers</li><li>Anthropic API</li><li>OpenAI API</li><li>LangChain</li><li>LangGraph</li><li>LangSmith evals</li><li>LLM-as-judge</li><li>Structured outputs</li><li>Prompt caching</li><li>Guardrails</li><li>Pinecone</li><li>Embeddings (bge, ONNX)</li></ul></div>
         <div class="gold"><h3>Modeling and data quality</h3><ul class="chips"><li>dbt (incl. Mesh)</li><li>Dimensional modeling</li><li>Data Vault 2.0</li><li>Data contracts</li><li>Great Expectations</li><li>Monte Carlo</li></ul></div>
         <div class="violet"><h3>ML and MLOps</h3><ul class="chips"><li>scikit-learn</li><li>MLflow</li><li>Champion/challenger</li><li>SageMaker</li><li>Feast</li><li>Time-based validation</li></ul></div>
         <div><h3>Cloud and infrastructure</h3><ul class="chips"><li>AWS S3</li><li>Lambda</li><li>Glue</li><li>Redshift</li><li>Step Functions</li><li>IAM</li><li>Azure Data Factory</li><li>Synapse</li><li>Event Hubs</li><li>Terraform</li><li>Airflow</li><li>Dagster</li></ul></div>
