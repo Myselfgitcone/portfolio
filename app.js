@@ -9,6 +9,8 @@ const FEEDS = {
   grainflowWeekly: "https://grainflow-mauve.vercel.app/data/weekly.json",
   footnote: "https://myselfgitcone.github.io/footnote/status.json",
   silo: "https://silo-production-9efb.up.railway.app/api/health",
+  clinical: "https://myselfgitcone.github.io/clinical-event-stream/data/summary.json",
+  clinicalWeekly: "https://myselfgitcone.github.io/clinical-event-stream/data/weekly.json",
 };
 
 const $ = (id) => document.getElementById(id);
@@ -174,12 +176,36 @@ async function silo(builtPromise) {
   }
 }
 
+// Clinical Event Stream rebuilds weekly, so it only counts as stale after 8 days.
+async function clinical() {
+  try {
+    const s = await read(FEEDS.clinical);
+    const v = s.volumes || {};
+    const t = s.dbt || {};
+    const asOf = Date.now() - new Date(s.generated_at) > 8 * 864e5 ? s.generated_at : null;
+    show(
+      "clinical",
+      `rebuilt ${ago(s.generated_at)}`,
+      `${n(v.patients)} synthetic patients · ${n(v.encounters)} encounters · ${n(v.quarantine)} quarantined · ${t.tests_passed}/${t.tests} dbt tests`,
+      `Live · ${n(v.patients)} synthetic patients · ${n(v.observations)} observations · rebuilt ${ago(s.generated_at)}`,
+      asOf
+    );
+  } catch {
+    down("clinical");
+  }
+  try {
+    const w = await read(FEEDS.clinicalWeekly);
+    spark("clinical", w.slice(-52).map((x) => x.patients).filter((x) => typeof x === "number"));
+  } catch {}
+}
+
 $("board-clock").textContent = new Date().toLocaleString("en-US", {
   month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short",
 });
 orderline();
 footnote();
 silo(grainflow());
+clinical();
 
 // Light / dark. Follows the system until the visitor picks, then remembers.
 $("theme").addEventListener("click", () => {

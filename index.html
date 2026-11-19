@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jagadish Butukuri · Senior Data Engineer · AI Engineer</title>
-  <meta name="description" content="Senior data engineer and AI engineer in St. Louis. Data platforms at enterprise scale, and the RAG, agent and MCP systems on top of them. Four live systems on real public data, with their numbers shown as they are right now.">
+  <meta name="description" content="Senior data engineer and AI engineer in St. Louis. Data platforms at enterprise scale, and the RAG, agent and MCP systems on top of them. Five live systems, with their numbers shown as they are right now.">
   <link rel="canonical" href="https://jagadish-butukuri.vercel.app/">
   <meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d1220" media="(prefers-color-scheme: dark)">
@@ -12,14 +12,14 @@
   <meta property="og:url" content="https://jagadish-butukuri.vercel.app/">
   <meta property="og:site_name" content="Jagadish Butukuri">
   <meta property="og:title" content="Jagadish Butukuri · Senior Data Engineer · AI Engineer">
-  <meta property="og:description" content="Data platforms at enterprise scale, and the AI on top of them. Four live systems you can open, showing their numbers as they are right now.">
+  <meta property="og:description" content="Data platforms at enterprise scale, and the AI on top of them. Five live systems you can open, showing their numbers as they are right now.">
   <meta property="og:image" content="https://jagadish-butukuri.vercel.app/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Jagadish Butukuri: data platforms that run at scale, and the AI on top of them. Four live projects.">
+  <meta property="og:image:alt" content="Jagadish Butukuri: data platforms that run at scale, and the AI on top of them. Five live projects.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Jagadish Butukuri · Senior Data Engineer · AI Engineer">
-  <meta name="twitter:description" content="Data platforms at enterprise scale, and the AI on top of them. Four live systems you can open.">
+  <meta name="twitter:description" content="Data platforms at enterprise scale, and the AI on top of them. Five live systems you can open.">
   <meta name="twitter:image" content="https://jagadish-butukuri.vercel.app/og.jpg">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -58,6 +58,7 @@
       --coral: #ef5a3c; --coral-soft: #fff0eb; --coral-ink: #c8412a;
       --gold: #e39a0c; --gold-soft: #fff6df; --gold-ink: #9a6400;
       --violet: #7c3aed; --violet-soft: #f4eeff; --violet-ink: #5f28bf;
+      --teal: #0f8f82; --teal-soft: #e6f6f3; --teal-ink: #0b6b61;
       --sans: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
       --mono: "Fragment Mono", ui-monospace, Menlo, monospace;
       --w: 1240px; --gutter: clamp(20px, 4vw, 48px); --r: 20px;
@@ -74,6 +75,7 @@
       --coral: #ff7a5e; --coral-soft: rgba(255,122,94,.13); --coral-ink: #ffb5a4;
       --gold: #f4b63b; --gold-soft: rgba(244,182,59,.13); --gold-ink: #ffd98a;
       --violet: #a07cff; --violet-soft: rgba(160,124,255,.14); --violet-ink: #d2c0ff;
+      --teal: #2dd4bf; --teal-soft: rgba(45,212,191,.13); --teal-ink: #9ff0e4;
       --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.6);
       --nav-bg: rgba(13,18,32,.78); --star-bg: rgba(21,28,46,.75); --chip-border: rgba(255,255,255,.06);
       --glow-opacity: .32; --shot-border: rgba(255,255,255,.12); --edge-opacity: .16; --dots: rgba(255,255,255,.07);
@@ -86,6 +88,7 @@
       --coral: #ff7a5e; --coral-soft: rgba(255,122,94,.13); --coral-ink: #ffb5a4;
       --gold: #f4b63b; --gold-soft: rgba(244,182,59,.13); --gold-ink: #ffd98a;
       --violet: #a07cff; --violet-soft: rgba(160,124,255,.14); --violet-ink: #d2c0ff;
+      --teal: #2dd4bf; --teal-soft: rgba(45,212,191,.13); --teal-ink: #9ff0e4;
       --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.6);
       --nav-bg: rgba(13,18,32,.78); --star-bg: rgba(21,28,46,.75); --chip-border: rgba(255,255,255,.06);
       --glow-opacity: .32; --shot-border: rgba(255,255,255,.12); --edge-opacity: .16; --dots: rgba(255,255,255,.07);
@@ -177,7 +180,7 @@
     .board h2 { margin: 0 0 12px; font: 500 12px/1 var(--mono); color: var(--board-dim); display: flex; justify-content: space-between; gap: 12px; letter-spacing: 0; }
     .board ol { list-style: none; margin: 0; padding: 0; }
     .board li { display: grid; grid-template-columns: 14px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--board-rule); opacity: 0; transform: translateY(4px); animation: boot .5s ease-out forwards; }
-    .board li:nth-child(2) { animation-delay: .12s; } .board li:nth-child(3) { animation-delay: .24s; } .board li:nth-child(4) { animation-delay: .36s; }
+    .board li:nth-child(2) { animation-delay: .12s; } .board li:nth-child(3) { animation-delay: .24s; } .board li:nth-child(4) { animation-delay: .36s; } .board li:nth-child(5) { animation-delay: .48s; }
     @keyframes boot { to { opacity: 1; transform: none; } }
     .board .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--board-dim); margin-top: 7px; }
     .board li.on .dot { background: var(--live); animation: pulse 2.4s ease-out infinite; }
@@ -186,7 +189,7 @@
     .board .sys { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
     .board .sys a { text-decoration: none; font-weight: 500; }
     .board .sys a:hover { text-decoration: underline; }
-    #b-orderline .sys a { color: #ff9a85; } #b-grainflow .sys a { color: #ffd37a; } #b-footnote .sys a { color: #9db2ff; } #b-silo .sys a { color: #cdb4ff; }
+    #b-orderline .sys a { color: #ff9a85; } #b-grainflow .sys a { color: #ffd37a; } #b-footnote .sys a { color: #9db2ff; } #b-silo .sys a { color: #cdb4ff; } #b-clinical .sys a { color: #7fe3d3; }
     .board .when { color: var(--board-dim); }
     .board .line { margin-top: 2px; }
     .board .spark { display: block; width: 100%; height: 28px; margin-top: 8px; opacity: 0; transition: opacity .6s ease; }
@@ -194,7 +197,7 @@
     .board .spark polyline { fill: none; stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
     .board .spark path { opacity: .18; }
     .board .spark .last { r: 2.2; }
-    #b-orderline .spark { color: #ff9a85; } #b-grainflow .spark { color: #ffd37a; }
+    #b-orderline .spark { color: #ff9a85; } #b-grainflow .spark { color: #ffd37a; } #b-clinical .spark { color: #7fe3d3; }
     .board .note { margin: 14px 0 0; color: var(--board-dim); font-size: 12px; }
 
     /* ---------- sections ---------- */
@@ -238,6 +241,7 @@
     .project.coral { background: var(--coral-soft); --c: var(--coral); --ci: var(--coral-ink); }
     .project.gold { background: var(--gold-soft); --c: var(--gold); --ci: var(--gold-ink); }
     .project.violet { background: var(--violet-soft); --c: var(--violet); --ci: var(--violet-ink); }
+    .project.teal { background: var(--teal-soft); --c: var(--teal); --ci: var(--teal-ink); }
     .project::after { content: ""; position: absolute; right: -120px; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: var(--c); opacity: .12; filter: blur(40px); pointer-events: none; }
     .p-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: start; position: relative; }
     .p-head h3 { margin: 0 0 6px; font-size: clamp(30px, 3.4vw, 42px); font-weight: 700; color: var(--ci); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -390,7 +394,7 @@
         <div class="me"><img src="img/jagadish.webp" width="640" height="640" alt="Jagadish Butukuri" fetchpriority="high" decoding="async"></div>
         <p class="eyebrow"><i></i>Open to Senior Data Engineer and AI Engineer roles, anywhere in the US</p>
         <h1>Data platforms that run at scale, and the <span class="grad">AI on top of them.</span></h1>
-        <p class="lede">I'm <b>Jagadish Butukuri</b>, a senior data engineer with 5+ years at JPMorgan Chase, Molina Healthcare, and Cargill. I take data pipelines, RAG, and agent systems from prototype to production. Four of my own projects run right now on real public data: two data platforms and two AI systems.</p>
+        <p class="lede">I'm <b>Jagadish Butukuri</b>, a senior data engineer with 5+ years at JPMorgan Chase, Molina Healthcare, and Cargill. I take data pipelines, RAG, and agent systems from prototype to production. Five of my own projects run right now: two data platforms and two AI systems on real public data, and a healthcare pipeline on synthetic patients.</p>
         <div class="actions">
           <a class="btn primary" href="#work">See the live projects</a>
           <a class="btn" href="https://www.linkedin.com/in/jagadish33/" target="_blank" rel="noopener">LinkedIn</a>
@@ -405,6 +409,7 @@
           <li id="b-grainflow"><span class="dot"></span><div><div class="sys"><a href="https://grainflow-mauve.vercel.app" target="_blank" rel="noopener">Grainflow</a><span class="when">checking…</span></div><div class="line">Streaming lakehouse: futures, weather, crop ratings</div><svg class="spark" viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true"></svg></div></li>
           <li id="b-silo"><span class="dot"></span><div><div class="sys"><a href="https://silo-production-9efb.up.railway.app" target="_blank" rel="noopener">Silo</a><span class="when">checking…</span></div><div class="line">MCP server and AI analyst over the Grainflow lake</div></div></li>
           <li id="b-orderline"><span class="dot"></span><div><div class="sys"><a href="https://myselfgitcone.github.io/orderline/" target="_blank" rel="noopener">Orderline</a><span class="when">checking…</span></div><div class="line">CDC from Postgres into Databricks, scored for late delivery</div><svg class="spark" viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true"></svg></div></li>
+          <li id="b-clinical"><span class="dot"></span><div><div class="sys"><a href="https://myselfgitcone.github.io/clinical-event-stream/" target="_blank" rel="noopener">Clinical Event Stream</a><span class="when">checking…</span></div><div class="line">FHIR R4 events, de-identified before silver, star schema on dbt</div><svg class="spark" viewBox="0 0 200 28" preserveAspectRatio="none" aria-hidden="true"></svg></div></li>
         </ol>
         <p class="note">Read from the systems themselves when this page opens.</p>
       </aside>
@@ -424,6 +429,7 @@
           <ul>
             <li>Streaming lakehouse with one set of data contracts from Kafka to gold: <a href="#grainflow">Grainflow</a>.</li>
             <li>Change data capture with zero lost changes, proven by replay in CI: <a href="#orderline">Orderline</a>.</li>
+            <li>HL7 FHIR R4 de-identified before silver, all 18 Safe Harbor classes tested, modelled as a star schema on Azure: <a href="#clinical">Clinical Event Stream</a>.</li>
             <li>Terabytes a day on Databricks at Cargill; hundreds of millions of banking transactions a day at JPMorgan; HIPAA data at Molina.</li>
           </ul>
         </div>
@@ -440,7 +446,7 @@
     </section>
 
     <section id="work">
-      <div class="section-head reveal"><h2>Projects</h2><p>Four systems built end to end on real public data, each still running on a schedule. Two are AI systems, two are data platforms, and Silo runs on top of Grainflow. For each: situation, task, action, result.</p></div>
+      <div class="section-head reveal"><h2>Projects</h2><p>Five systems built end to end, each still running on a schedule. Four run on real public data; the fifth runs on synthetic patients, because real ones cannot be published. Two are AI systems, three are data platforms, and Silo runs on top of Grainflow. For each: situation, task, action, result.</p></div>
 
       <article class="project blue reveal" id="footnote">
         <div class="p-head">
@@ -581,6 +587,42 @@
             <li><span class="k">All four</span> planted causes of lateness identified.</li>
             <li><span class="k">Zero lost changes</span>: replayed duplicates are removed by log position, proven by row-for-row replay checks in CI.</li>
             <li>Syncs every <span class="k">six hours</span>, with a live page showing predictions and the model's track record.</li>
+          </ul></div>
+        </div>
+      </article>
+
+      <article class="project teal reveal" id="clinical">
+        <div class="p-head">
+          <div>
+            <h3><a href="https://myselfgitcone.github.io/clinical-event-stream/" target="_blank" rel="noopener">Clinical Event Stream</a> <span class="tag">Data engineering · Healthcare</span> <span class="live" id="clinical-live">Live · rebuilt weekly</span></h3>
+            <p class="what">HL7 FHIR R4 records for thousands of synthetic patients, validated against contracts, de-identified before anything reaches silver, and modelled as a star schema that answers a clinical question. Azure landing behind one flag.</p>
+          </div>
+          <div class="p-links"><a class="btn c" href="https://myselfgitcone.github.io/clinical-event-stream/" target="_blank" rel="noopener">Open the page</a><a class="btn" href="https://github.com/Myselfgitcone/clinical-event-stream" target="_blank" rel="noopener">GitHub</a></div>
+        </div>
+        <div class="p-body">
+          <div>
+            <ul class="stack stagger"><li>FHIR R4</li><li>Synthea</li><li>Python</li><li>DuckDB</li><li>dbt</li><li>ADLS Gen2</li><li>Bicep</li><li>Synapse serverless</li><li>GitHub Actions</li></ul>
+            <div class="results stagger">
+              <div><span class="n">18 of 18</span><p>Safe Harbor identifier classes, one test each, plus a sweep that proves no raw identifier survives</p></div>
+              <div><span class="n">2.6M rows, 0 quarantined</span><p>through contracts into bronze on the first full cohort</p></div>
+              <div><span class="n">91 dbt tests</span><p>on 27 models, including that no identifier column or raw UUID reaches gold</p></div>
+            </div>
+          </div>
+          <a class="shot" href="https://myselfgitcone.github.io/clinical-event-stream/" target="_blank" rel="noopener" aria-label="Open Clinical Event Stream"><img src="img/clinical.webp" width="1200" height="504" alt="Clinical Event Stream: patients, encounters, observations, quarantine and dbt tests, with condition pairs and care gaps" loading="lazy" decoding="async"></a>
+        </div>
+        <div class="star">
+          <div><h4>Situation</h4><p>Healthcare data roles ask for FHIR and PHI handling in the first screen, and real patient data can never be shown publicly. The only lawful way to prove the work is on synthetic patients, with the de-identification rules tested rather than claimed.</p></div>
+          <div><h4>Task</h4><p>Take FHIR R4 bundles in, validate every record, strip or disguise all eighteen HIPAA Safe Harbor identifiers before analysts can touch the data, build a dimensional model that answers which chronic conditions co-occur and where the diabetes care gaps are, and land it in Azure's free tier.</p></div>
+          <div class="wide"><h4>Action</h4><ul>
+            <li>One YAML contract per resource type carries types, rules, the Safe Harbor class of every field and what de-identification does to it; the same file drives the validator, the parquet schemas and the de-identifier. Records that fail go to quarantine with reasons, never dropped.</li>
+            <li>Every id becomes an HMAC pseudonym, every date of a patient shifts by the same secret offset so clinical intervals stay exact, ZIP becomes ZIP3 with the HHS low-population list, anyone over 89 is banded. A k-anonymity report says what Safe Harbor leaves behind.</li>
+            <li>dbt on DuckDB builds a type 2 patient dimension, six facts and two marts; a weekly GitHub Actions run generates a fresh seeded cohort and extends the published series; Bicep creates the ADLS Gen2 account, one filesystem per layer, with a $1 budget alarm.</li>
+          </ul></div>
+          <div class="wide result"><h4>Result</h4><ul>
+            <li><span class="k">2,268 patients</span>, 2.6 million records, <span class="k">zero</span> quarantined; 29% of medication orders carried their code by reference and were caught by the first contract.</li>
+            <li>The de-identification audit caught my own bug: a URL sweep had rewritten every code system, and the count of sweeps equalling the row count exposed it.</li>
+            <li>After Safe Harbor, <span class="k">8.9%</span> of patients are still unique on six quasi-identifiers, reported on the page rather than hidden.</li>
+            <li>Hypertension and metabolic syndrome co-occur at <span class="k">3.4×</span> chance; uninsured diabetics get an HbA1c within 90 days a third as often as insured ones.</li>
           </ul></div>
         </div>
       </article>
